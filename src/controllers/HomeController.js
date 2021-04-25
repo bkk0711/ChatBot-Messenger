@@ -4,6 +4,8 @@ import chatbotService from "../services/chatbotService";
 
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+const URL_WEBVIEW_DK = process.env.URL_WEBVIEW_DK;
+
 //process.env.NAME_VARIABLES
 let getHomePage = (req, res) => {
     return res.render('homepage.ejs');
@@ -160,23 +162,77 @@ async function handlePostback(sender_psid, received_postback) {
         }
           break;
         case 'CAC_NGANH':
+            let response1 = { "text": "Hiện tại *Khoa Công Nghệ Thông Tin* đang tuyển sinh các ngành sau đây  " }
+            callSendAPI(sender_psid, response1);
             response = {
-                "attachment":{
-                    "type":"template",
-                    "payload":{
-                      "template_type":"button",
-                      "text":"What do you want to do next?",
-                      "buttons":[
+                "attachment": {
+                    "type": "template",
+                    "payload": {
+                        "template_type": "generic",
+                        "elements": [{
+                            "title": "Công Nghệ Thông Tin",
+                            "subtitle": "Tap để chọn ",
+                            "image_url": "https://i.imgur.com/cskXCn2.png",
+                            "buttons": [
+                                {
+                                    "type": "postback",
+                                    "title": "Xem chi tiết",
+                                    "payload": "CNTT",
+                                }
+                            ]
+                        },
                         {
-                          "type":"web_url",
-                          "url":"https://www.messenger.com",
-                          "title":"Visit Messenger"
-                        }
-                      ]
+                            "title": "Khoa Học Máy Tính",
+                            "subtitle": "Tap để chọn ",
+                            "image_url": "https://i.imgur.com/GAn372n.png",
+                            "buttons": [
+                                {
+                                    "type": "postback",
+                                    "title": "Xem chi tiết",
+                                    "payload": "KHMT",
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Kỹ Thuật Phần Mềm",
+                            "subtitle": "Tap để chọn ",
+                            "image_url": "https://i.imgur.com/TB6Ha25.png",
+                            "buttons": [
+                                {
+                                    "type": "postback",
+                                    "title": "Xem chi tiết",
+                                    "payload": "KTPM",
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Hệ Thống Thông Tin",
+                            "subtitle": "Tap để chọn ",
+                            "image_url": "https://i.imgur.com/CL0rji9.png",
+                            "buttons": [
+                                {
+                                    "type": "postback",
+                                    "title": "Xem chi tiết",
+                                    "payload": "HTTT",
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Khoa Học Dữ Liệu",
+                            "subtitle": "Tap để chọn ",
+                            "image_url": "https://i.imgur.com/qwf89Z5.png",
+                            "buttons": [
+                                {
+                                    "type": "postback",
+                                    "title": "Xem chi tiết",
+                                    "payload": "KHDL",
+                                }
+                            ]
+                        }]
                     }
-                  }
-                
                 }
+                }
+                
                 
           break;
         case 'HINH_THUC':
@@ -206,6 +262,43 @@ async function handlePostback(sender_psid, received_postback) {
                 }
             }
             break;
+        case 'CNTT':
+            await sender_action(sender_psid);
+            let cntt = {"text": "Thông tin : Ngành Công Nghệ Thông Tin"}
+            await callSendAPI(sender_psid, cntt);
+
+            await sender_action(sender_psid);
+
+            let cntt1 = { "text": "Mã trường : KCC"}
+            await callSendAPI(sender_psid, cntt1);
+
+            await sender_action(sender_psid);
+            
+            let cntt2 = { "text": "Mã ngành : 7480201 "}
+            await callSendAPI(sender_psid, cntt2);
+
+            await sender_action(sender_psid);
+            
+            // let cntt3 = {  "text": " " }
+            // callSendAPI(sender_psid, cntt3);
+            let cntt4 = {
+                "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
+                "quick_replies":[
+                {
+                    "type":"web_url",
+                    "url": URL_WEBVIEW_DK,
+                    "title": "Đăng ký tư vấn",
+                    "webview_height_ratio": "tall",
+                    "messenger_extensions": "true"
+                },{
+                  "content_type":"text",
+                  "title":"Tạo Ảnh Thông Tin",
+                  "payload":"IMG_CNTT",
+                }
+              ]}
+              await setTimeout(() => {callSendQickReplies(sender_psid, cntt4)}, 2000);
+            // await callSendQickReplies(sender_psid, cntt4);
+            break;
         default:
           // code block
       }
@@ -218,7 +311,29 @@ async function handlePostback(sender_psid, received_postback) {
     // Send the message to acknowledge the postback
     callSendAPI(sender_psid, response);
 }
+function sender_action(sender_psid){
+    let request_body = {
+        "recipient":{
+        "id":sender_psid
+        },
+        "sender_action":"typing_on"
+    }
+     // Send the HTTP request to the Messenger Platform
+     request({
+        "uri": "https://graph.facebook.com/v10.0/me/messages",
+        "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        
+        if (!err) {
+            console.log('Typing.....')
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
 
+}
 // Sends response messages via the Send API
 function callSendAPI(sender_psid, response) {
     // Construct the message body
@@ -231,19 +346,48 @@ function callSendAPI(sender_psid, response) {
 
     // Send the HTTP request to the Messenger Platform
     request({
-        "uri": "https://graph.facebook.com/v2.6/me/messages",
+        "uri": "https://graph.facebook.com/v10.0/me/messages",
         "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
         "method": "POST",
         "json": request_body
     }, (err, res, body) => {
         
         if (!err) {
-            console.log('message sent!' + res)
+            console.log('message sent!')
         } else {
             console.error("Unable to send message:" + err);
         }
     });
 }
+
+function callSendQickReplies(sender_psid, response) {
+    // Construct the message body
+    let request_body = {
+        "recipient": {
+            "id": sender_psid
+        },
+        "messaging_type": "RESPONSE",
+        "message": response
+    }
+
+    // Send the HTTP request to the Messenger Platform
+    request({
+        "uri": "https://graph.facebook.com/v10.0/me/messages",
+        "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        
+        if (!err) {
+            console.log('message sent Qickly!')
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
+}
+
+
+
 
 let setupProfile = async(req, res) =>{
 
@@ -323,11 +467,16 @@ let setupmenu = async(req, res) =>{
     return res.send("Success");
 }
 
+let handleRegister = (req, res) =>{
+    return res.render('dang_ky.ejs');
+
+}
 module.exports = {
     getHomePage: getHomePage,
     postWebhook: postWebhook,
     getWebhook: getWebhook,
     setupProfile: setupProfile,
-    setupmenu : setupmenu
+    setupmenu : setupmenu,
+    handleRegister: handleRegister
 
 }

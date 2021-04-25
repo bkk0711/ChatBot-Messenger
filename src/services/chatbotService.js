@@ -3,7 +3,7 @@ import request from "request"
 require('dotenv').config();
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
-
+const URL_WEBVIEW_DK = process.env.URL_WEBVIEW_DK;
 let getInfoProfile = (sender_psid, typeif) =>{
     return new Promise(async (resolve, reject) => {
         let info = '';
@@ -107,9 +107,11 @@ let getStarted_menu = () =>{
                             "payload": "TUYEN_SINH",
                         },
                         {
-                            "type": "postback",
+                            "type":"web_url",
+                            "url": URL_WEBVIEW_DK,
                             "title": "Đăng ký tư vấn",
-                            "payload": "DANG_KY",
+                            "webview_height_ratio": "tall",
+                            "messenger_extensions": "true"
                         }
                     ],
                 }]
