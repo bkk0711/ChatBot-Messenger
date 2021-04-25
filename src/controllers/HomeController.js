@@ -1,5 +1,6 @@
 require('dotenv').config();
 import request from "request";
+import chatbotService from "../services/chatbotService";
 
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
@@ -117,7 +118,7 @@ function handleMessage(sender_psid, received_message) {
 }
 
 // Handles messaging_postbacks events
-function handlePostback(sender_psid, received_postback) {
+async function handlePostback(sender_psid, received_postback) {
     let response;
 
     // Get the payload for the postback
@@ -125,9 +126,23 @@ function handlePostback(sender_psid, received_postback) {
 
     // Set the response based on the postback payload
     
-    if (payload === 'GET_STARTED'){
-        response = { "text": "Chào mừng bạn đến với Khoa Công Nghệ Thông Tin, Trường đại học Kỹ thuật - Công nghệ Cần Thơ" }
-    }
+    switch(payload) {
+        case 'GET_STARTED':
+            response = { "text": "Chào mừng bạn đến với Khoa Công Nghệ Thông Tin, Trường đại học Kỹ thuật - Công nghệ Cần Thơ" }
+            await chatbotService.handleGetStarted(sender_psid, response);
+          break;
+        case '':
+          // code block
+          break;
+        default:
+          // code block
+      }
+
+    // if (payload === 'GET_STARTED'){
+       
+    //    // response = { "text": "Chào mừng bạn đến với Khoa Công Nghệ Thông Tin, Trường đại học Kỹ thuật - Công nghệ Cần Thơ" }
+
+    // }
     // Send the message to acknowledge the postback
     callSendAPI(sender_psid, response);
 }
@@ -182,6 +197,7 @@ let setupProfile = async(req, res) =>{
     });
     return res.send("Success");
 }
+
 
 module.exports = {
     getHomePage: getHomePage,
