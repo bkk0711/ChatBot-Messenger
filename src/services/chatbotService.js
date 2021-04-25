@@ -73,9 +73,14 @@ let handleGetStarted = (sender_psid) =>{
     return new Promise(async (resolve, reject) => {
         try{
             let fullname = await getInfoProfile(sender_psid, 'full_name');
-            let response = { "text": `Chào mừng ${fullname} đến với Khoa Công Nghệ Thông Tin | Trường đại học Kỹ thuật - Công nghệ Cần Thơ` }
+            let response = { "text": `Xin chào ${fullname} ! `}
+        
             await callSendAPI(sender_psid, response);
             
+            let response0 = { "text": `Cảm ơn bạn đã ghé thăm Fanpage Khoa Công Nghệ Thông Tin | Trường đại học Kỹ thuật - Công nghệ Cần Thơ ! `}
+        
+            await callSendAPI(sender_psid, response0);
+
             let response2 = getStarted_menu();
             await callSendAPI(sender_psid, response2);
 
@@ -92,19 +97,19 @@ let getStarted_menu = () =>{
             "payload": {
                 "template_type": "generic",
                 "elements": [{
-                    "title": "Menu chức năng của chatbot",
+                    "title": "Menu chức năng của Chatbot Fanpage Khoa CNTT CTUET",
                     "subtitle": "Tap để chọn chức năng",
                     "image_url": "https://old.ctuet.edu.vn/CSS/MainPage/Image/banner.jpg",
                     "buttons": [
                         {
                             "type": "postback",
-                            "title": "Menu 1",
-                            "payload": "menu_1",
+                            "title": "Thông tin tuyển sinh",
+                            "payload": "TUYEN_SINH",
                         },
                         {
                             "type": "postback",
-                            "title": "Menu 2",
-                            "payload": "menu_2",
+                            "title": "Đăng ký tư vấn",
+                            "payload": "DANG_KY",
                         }
                     ],
                 }]
