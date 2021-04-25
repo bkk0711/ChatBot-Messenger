@@ -75,6 +75,7 @@ let handleGetStarted = (sender_psid) =>{
             let fullname = await getInfoProfile(sender_psid, 'full_name');
             let response = { "text": `Chào mừng ${fullname} đến với Khoa Công Nghệ Thông Tin | Trường đại học Kỹ thuật - Công nghệ Cần Thơ` }
             await callSendAPI(sender_psid, response);
+            
             let response2 = getStarted_menu();
             await callSendAPI(sender_psid, response2);
 

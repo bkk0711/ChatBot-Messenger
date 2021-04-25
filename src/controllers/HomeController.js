@@ -127,6 +127,7 @@ async function handlePostback(sender_psid, received_postback) {
     // Set the response based on the postback payload
     
     switch(payload) {
+        case 'RESET':
         case 'GET_STARTED':
              await chatbotService.handleGetStarted(sender_psid);
           break;
@@ -197,11 +198,64 @@ let setupProfile = async(req, res) =>{
     return res.send("Success");
 }
 
+let setupmenu = async(req, res) =>{
+
+    let request_body = 
+        {
+            "persistent_menu": [
+                {
+                    "locale": "default",
+                    "composer_input_disabled": false,
+                    "call_to_actions": [
+                        {
+                            "type": "postback",
+                            "title": "Menu Chính",
+                            "payload": "MAIN_MENU"
+                        },
+                        {
+                            "type": "postback",
+                            "title": "Thông Tin Về Khoa",
+                            "payload": "TT_KHOA"
+                        },
+                        {
+                            "type": "web_url",
+                            "title": "Thông tin về trường",
+                            "url": "https://www.ctuet.edu.vn",
+                            "webview_height_ratio": "full"
+                        },
+                        {
+                            "type": "postback",
+                            "title": "Khởi động lại BOT",
+                            "payload": "RESET"
+                        },
+                    ]
+                }
+            ]
+        }
+       
+    
+
+    await request({
+        "uri": `https://graph.facebook.com/v10.0/me/messenger_profile?access_token=${PAGE_ACCESS_TOKEN}`,
+        "qs": { "access_token": PAGE_ACCESS_TOKEN },
+        "method": "POST",
+        "json": request_body
+    }, (err, res, body) => {
+        console.log(body);
+        if (!err) {
+            console.log('Setup Profile success')
+        } else {
+            console.error("Unable to send message:" + err);
+        }
+    });
+    return res.send("Success");
+}
 
 module.exports = {
     getHomePage: getHomePage,
     postWebhook: postWebhook,
     getWebhook: getWebhook,
-    setupProfile: setupProfile
+    setupProfile: setupProfile,
+    setupmenu : setupmenu
 
 }
