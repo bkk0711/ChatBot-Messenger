@@ -131,8 +131,33 @@ async function handlePostback(sender_psid, received_postback) {
         case 'GET_STARTED':
              await chatbotService.handleGetStarted(sender_psid);
           break;
-        case '':
+        case 'TUYEN_SINH':
           // code block
+          let response = {
+            "attachment": {
+                "type": "template",
+                "payload": {
+                    "template_type": "generic",
+                    "elements": [{
+                        "title": "Menu chức năng của Chatbot Fanpage Khoa CNTT CTUET",
+                        "subtitle": "Tap để chọn chức năng",
+                        "image_url": "https://old.ctuet.edu.vn/CSS/MainPage/Image/banner.jpg",
+                        "buttons": [
+                            {
+                                "type": "postback",
+                                "title": "Thông tin tuyển sinh",
+                                "payload": "TUYEN_SINH",
+                            },
+                            {
+                                "type": "postback",
+                                "title": "Đăng ký tư vấn",
+                                "payload": "DANG_KY",
+                            }
+                        ],
+                    }]
+                }
+            }
+        }
           break;
         default:
           // code block

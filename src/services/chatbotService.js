@@ -118,6 +118,35 @@ let getStarted_menu = () =>{
     }
     return response;
 }
+ let thongtintuyensinh = () => {
+    let response = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "Thông tin tuyển sinh",
+                    "subtitle": "Tap để chọn ",
+                    "image_url": "",
+                    "buttons": [
+                        {
+                            "type": "postback",
+                            "title": "Các ngành tuyển sinh",
+                            "payload": "CAC_NGANH",
+                        },
+                        {
+                            "type": "postback",
+                            "title": "Hình thức xét tuyển",
+                            "payload": "HINH_THUC",
+                        }
+                    ],
+                }]
+            }
+        }
+    }
+    return response;
+ }
+
 module.exports = {
     handleGetStarted : handleGetStarted,
     getInfoProfile : getInfoProfile
