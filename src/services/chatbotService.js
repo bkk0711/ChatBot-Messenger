@@ -41,10 +41,10 @@ let getInfoProfile = (sender_psid, typeif) =>{
             }
         });
         
-    }
+    })
+}
    
 
-}
 
 let callSendAPI = (sender_psid, response) => {
     let request_body = {
