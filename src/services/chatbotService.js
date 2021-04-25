@@ -110,6 +110,7 @@ let getStarted_menu = () =>{
             }
         }
     }
+    return response;
 }
 module.exports = {
     handleGetStarted : handleGetStarted,
