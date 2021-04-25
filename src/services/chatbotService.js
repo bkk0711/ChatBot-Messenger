@@ -69,7 +69,7 @@ let callSendAPI = (sender_psid, response) => {
 let handleGetStarted = (sender_psid) =>{
     return new Promise(async (resolve, reject) => {
         try{
-            let fullname = await getInfoProfile(sender_psid, 'full_name');
+            let fullname = getInfoProfile(sender_psid, 'full_name');
             let response = { "text": `Chào mừng ${fullname} đến với Khoa Công Nghệ Thông Tin, Trường đại học Kỹ thuật - Công nghệ Cần Thơ` }
             await callSendAPI(sender_psid, response);
         }catch(e){
