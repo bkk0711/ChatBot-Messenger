@@ -4,6 +4,7 @@ require('dotenv').config();
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
 
+
 let callSendAPI = (sender_psid, response) => {
     let request_body = {
         "recipient": {
@@ -27,7 +28,7 @@ let callSendAPI = (sender_psid, response) => {
         }
     });
 }
-let handleGetStarted =(sender_psid, response)=>{
+let handleGetStarted = (sender_psid, response) =>{
     return new Promise(async (resolve, reject) => {
         try{
             await callSendAPI(sender_psid, response);
@@ -36,4 +37,9 @@ let handleGetStarted =(sender_psid, response)=>{
         }
     })
 
+}
+
+module.exports = {
+    handleGetStarted : handleGetStarted
+    
 }
