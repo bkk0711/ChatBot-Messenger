@@ -73,15 +73,44 @@ let handleGetStarted = (sender_psid) =>{
     return new Promise(async (resolve, reject) => {
         try{
             let fullname = await getInfoProfile(sender_psid, 'full_name');
-            let response = { "text": `Chào mừng ${fullname} đến với Khoa Công Nghệ Thông Tin, Trường đại học Kỹ thuật - Công nghệ Cần Thơ` }
+            let response = { "text": `Chào mừng ${fullname} đến với Khoa Công Nghệ Thông Tin | Trường đại học Kỹ thuật - Công nghệ Cần Thơ` }
             await callSendAPI(sender_psid, response);
+            let response2 = getStarted_menu();
+            await callSendAPI(sender_psid, response2);
+
         }catch(e){
             reject(e);
         }
     })
 
 }
-
+let getStarted_menu = () =>{
+    let response = {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [{
+                    "title": "Menu chức năng của chatbot",
+                    "subtitle": "Tap để chọn chức năng",
+                    "image_url": "https://old.ctuet.edu.vn/CSS/MainPage/Image/banner.jpg",
+                    "buttons": [
+                        {
+                            "type": "postback",
+                            "title": "Menu 1",
+                            "payload": "menu_1",
+                        },
+                        {
+                            "type": "postback",
+                            "title": "Menu 2",
+                            "payload": "menu_2",
+                        }
+                    ],
+                }]
+            }
+        }
+    }
+}
 module.exports = {
     handleGetStarted : handleGetStarted,
     getInfoProfile : getInfoProfile
