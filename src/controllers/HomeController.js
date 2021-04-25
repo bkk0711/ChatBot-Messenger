@@ -161,37 +161,41 @@ async function handlePostback(sender_psid, received_postback) {
           break;
           case 'CAC_NGANH':
             response = {
-                "attachment":{
-                    "type":"template",
-                    "payload":{
-                      "template_type":"button",
-                      "text":"Hiện tại Khoa CNTT CTUET đang tuyển sinh các ngành sau đây :",
-                      "buttons":[
-                        {
-                            "type":"postback",
-                            "title":"Công Nghệ Thông Tin",
-                            "payload":"CNTT"
-                          },{
-                            "type":"postback",
-                            "title":"Khoa Học Máy Tính",
-                            "payload":"KHMT"
-                          },{
-                            "type":"postback",
-                            "title":"Kỹ Thuật Phần Mềm",
-                            "payload":"KTPM"
-                          },{
-                            "type":"postback",
-                            "title":"Hệ Thống Thông Tin",
-                            "payload":"HTTT"
-                          },{
-                            "type":"postback",
-                            "title":"Khoa Học Dữ Liệu",
-                            "payload":"KHDL"
-                          }
-                      
-                      ]
+                "attachment": {
+                    "type": "template",
+                    "payload": {
+                        "template_type": "generic",
+                        "elements": [{
+                            "title": "Hiện tại Khoa CNTT CTUET đang tuyển sinh các ngành sau đây",
+                            "subtitle": "Tap để chọn ",
+                            "image_url": "",
+                            "buttons": [
+                                {
+                                    "type":"postback",
+                                    "title":"Công Nghệ Thông Tin",
+                                    "payload":"CNTT"
+                                  },{
+                                    "type":"postback",
+                                    "title":"Khoa Học Máy Tính",
+                                    "payload":"KHMT"
+                                  },{
+                                    "type":"postback",
+                                    "title":"Kỹ Thuật Phần Mềm",
+                                    "payload":"KTPM"
+                                  },{
+                                    "type":"postback",
+                                    "title":"Hệ Thống Thông Tin",
+                                    "payload":"HTTT"
+                                  },{
+                                    "type":"postback",
+                                    "title":"Khoa Học Dữ Liệu",
+                                    "payload":"KHDL"
+                                  }
+                            ],
+                        }]
                     }
-                  }
+                }
+             
             }
           break;
         default:
