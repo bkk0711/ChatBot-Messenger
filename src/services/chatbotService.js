@@ -28,9 +28,9 @@ let callSendAPI = (sender_psid, response) => {
     });
 }
 let handleGetStarted =(sender_psid, response)=>{
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try{
-            callSendAPI(sender_psid, response)
+            await callSendAPI(sender_psid, response);
         }catch(e){
             reject(e);
         }
