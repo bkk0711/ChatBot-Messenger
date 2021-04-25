@@ -165,36 +165,17 @@ async function handlePostback(sender_psid, received_postback) {
                     "type":"template",
                     "payload":{
                       "template_type":"button",
-                      "text":"Hiện tại Khoa CNTT CTUET đang tuyển sinh các ngành sau đây !",
+                      "text":"What do you want to do next?",
                       "buttons":[
                         {
-                            "type":"postback",
-                            "title":"Công Nghệ Thông Tin",
-                            "payload":"CNTT"
-                          },
-                          {
-                            "type":"postback",
-                            "title":"Khoa Học Máy Tính",
-                            "payload":"KHMT"
-                          },
-                          {
-                            "type":"postback",
-                            "title":"Kỹ Thuật Phần Mềm",
-                            "payload":"KTPM"
-                          },
-                          {
-                            "type":"postback",
-                            "title":"Hệ Thống Thông Tin",
-                            "payload":"HTTT"
-                          },
-                          {
-                            "type":"postback",
-                            "title":"Khoa Học Dữ Liệu",
-                            "payload":"KHDL"
-                          }
+                          "type":"web_url",
+                          "url":"https://www.messenger.com",
+                          "title":"Visit Messenger"
+                        }
                       ]
                     }
                   }
+                
                 }
                 
           break;
