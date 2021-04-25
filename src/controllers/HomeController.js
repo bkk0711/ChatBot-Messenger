@@ -139,19 +139,19 @@ async function handlePostback(sender_psid, received_postback) {
                 "payload": {
                     "template_type": "generic",
                     "elements": [{
-                        "title": "Menu chức năng của Chatbot Fanpage Khoa CNTT CTUET",
-                        "subtitle": "Tap để chọn chức năng",
-                        "image_url": "https://old.ctuet.edu.vn/CSS/MainPage/Image/banner.jpg",
+                        "title": "Thông tin tuyển sinh",
+                        "subtitle": "Tap để chọn ",
+                        "image_url": "",
                         "buttons": [
                             {
                                 "type": "postback",
-                                "title": "Thông tin tuyển sinh",
-                                "payload": "TUYEN_SINH",
+                                "title": "Các ngành tuyển sinh",
+                                "payload": "CAC_NGANH",
                             },
                             {
                                 "type": "postback",
-                                "title": "Đăng ký tư vấn",
-                                "payload": "DANG_KY",
+                                "title": "Hình thức xét tuyển",
+                                "payload": "HINH_THUC",
                             }
                         ],
                     }]
