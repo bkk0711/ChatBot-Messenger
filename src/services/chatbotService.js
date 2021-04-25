@@ -34,7 +34,7 @@ let getInfoProfile = (sender_psid, typeif) =>{
         }else if(typeif == 'gender') {
             info = body.gender;
         }
-            console.log('message sent: ' +  + info)
+            console.log('message sent: ' + info)
         } else {
             console.error("Unable to send message:" + err);
         }
@@ -66,9 +66,11 @@ let callSendAPI = (sender_psid, response) => {
         }
     });
 }
-let handleGetStarted = (sender_psid, response) =>{
+let handleGetStarted = (sender_psid) =>{
     return new Promise(async (resolve, reject) => {
         try{
+            let fullname = await getInfoProfile(sender_psid, 'full_name');
+            let response = { "text": `Chào mừng ${fullname} đến với Khoa Công Nghệ Thông Tin, Trường đại học Kỹ thuật - Công nghệ Cần Thơ` }
             await callSendAPI(sender_psid, response);
         }catch(e){
             reject(e);

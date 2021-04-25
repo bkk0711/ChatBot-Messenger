@@ -128,9 +128,7 @@ async function handlePostback(sender_psid, received_postback) {
     
     switch(payload) {
         case 'GET_STARTED':
-            let fullname = await chatbotService.getInfoProfile(sender_psid, 'full_name');
-            response = { "text": `Chào mừng ${fullname} đến với Khoa Công Nghệ Thông Tin, Trường đại học Kỹ thuật - Công nghệ Cần Thơ` }
-            await chatbotService.handleGetStarted(sender_psid, response);
+             await chatbotService.handleGetStarted(sender_psid);
           break;
         case '':
           // code block
