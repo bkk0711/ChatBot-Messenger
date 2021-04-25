@@ -9,8 +9,7 @@ let getInfoProfile = (sender_psid, typeif) =>{
     request({
         "uri": `https://graph.facebook.com/${sender_psid}?fields=first_name,last_name,profile_pic&access_token=${PAGE_ACCESS_TOKEN}`,
         "qs": { "access_token": PAGE_ACCESS_TOKEN },
-        "method": "GET",
-        "json": request_body
+        "method": "GET"
     }, (err, res, body) => {
         // {
         //     "first_name": "Peter",
@@ -56,7 +55,8 @@ let callSendAPI = (sender_psid, response) => {
     request({
         "uri": "https://graph.facebook.com/v10/me/messages",
         "qs": { "access_token": PAGE_ACCESS_TOKEN },
-        "method": "POST"
+        "method": "POST",
+        "json": request_body
     }, (err, res, body) => {
         
         if (!err) {
