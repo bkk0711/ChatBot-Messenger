@@ -165,34 +165,38 @@ async function handlePostback(sender_psid, received_postback) {
                     "type":"template",
                     "payload":{
                       "template_type":"button",
-                      "text":"Hiện tại Khoa CNTT CTUET đang tuyển sinh các ngành sau đây",
+                      "text":"Hiện tại Khoa CNTT CTUET đang tuyển sinh các ngành sau đây !",
                       "buttons":[
                         {
                             "type":"postback",
                             "title":"Công Nghệ Thông Tin",
                             "payload":"CNTT"
-                          },{
+                          },
+                          {
                             "type":"postback",
                             "title":"Khoa Học Máy Tính",
                             "payload":"KHMT"
-                          },{
+                          },
+                          {
                             "type":"postback",
                             "title":"Kỹ Thuật Phần Mềm",
                             "payload":"KTPM"
-                          },{
+                          },
+                          {
                             "type":"postback",
                             "title":"Hệ Thống Thông Tin",
                             "payload":"HTTT"
-                          },{
+                          },
+                          {
                             "type":"postback",
                             "title":"Khoa Học Dữ Liệu",
                             "payload":"KHDL"
                           }
-                      
                       ]
                     }
                   }
-            }
+                }
+                
           break;
         case 'HINH_THUC':
             response = {
@@ -207,12 +211,12 @@ async function handlePostback(sender_psid, received_postback) {
                             "buttons": [
                                 {
                                     "type": "postback",
-                                    "title": "Xét tuyển bằng học bạ",
+                                    "title": "Bằng học bạ",
                                     "payload": "XT_HOCBA",
                                 },
                                 {
                                     "type": "postback",
-                                    "title": "Xét tuyển bằng điểm thi THPTQG",
+                                    "title": "Bằng điểm thi THPTQG",
                                     "payload": "XT_DIEMTHI",
                                 }
                             ],
