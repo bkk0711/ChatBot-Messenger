@@ -133,7 +133,7 @@ async function handlePostback(sender_psid, received_postback) {
           break;
         case 'TUYEN_SINH':
           // code block
-          let response = {
+          response = {
             "attachment": {
                 "type": "template",
                 "payload": {
