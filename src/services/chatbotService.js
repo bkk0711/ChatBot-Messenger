@@ -20,20 +20,20 @@ let getInfoProfile = (sender_psid, typeif) =>{
         //     "gender": "male",
         //   }
         console.log(body);
-        response = JSON.parse(body);
-        if(typeif == 'full_name'){
-            info = `${response.first_name} ${response.last_name}`;
-        }else if(typeif == 'first_name'){
-            info = response.first_name;
-        }else if(typeif == 'last_name'){
-            info = response.last_name;
-        }else if(typeif == 'profile_pic'){
-            info = response.profile_pic;
-        }else if(typeif == 'gender') {
-            info = response.gender;
-        }
-
+        
         if (!err) {
+        body = JSON.parse(body);
+        if(typeif == 'full_name'){
+            info = `${body.first_name} ${body.last_name}`;
+        }else if(typeif == 'first_name'){
+            info = body.first_name;
+        }else if(typeif == 'last_name'){
+            info = body.last_name;
+        }else if(typeif == 'profile_pic'){
+            info = body.profile_pic;
+        }else if(typeif == 'gender') {
+            info = body.gender;
+        }
             console.log('message sent!')
         } else {
             console.error("Unable to send message:" + err);
