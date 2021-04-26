@@ -491,7 +491,7 @@ let handlePostRegister = async (req, res)  =>{
 
         let replyreg1 = {
             "text": `Bạn đã đăng ký tư vấn thành công!! 
-            Bộ phận tuyển sinh sẽ liên lạc và tư vấn cho bạn trong tương lai`   
+Bộ phận tuyển sinh sẽ liên lạc và tư vấn cho bạn trong tương lai`   
         }
         await sender_action(req.body.psid);
         await callSendAPI(req.body.psid, replyreg1);
@@ -523,7 +523,7 @@ let handlePostRegister = async (req, res)  =>{
                 "Thời gian": formatedDate,
                 "Tên khách hàng": customerName
             });
-
+            console.log('write to sheet done');
 
     }catch(e){
         console.log(e);
