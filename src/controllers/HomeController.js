@@ -297,13 +297,19 @@ async function handlePostback(sender_psid, received_postback) {
                       "buttons":[
                         {
                           "type":"postback",
-                          "title":"Postback Button",
-                          "payload":"DEVELOPER_DEFINED_PAYLOAD"
-                        }
+                          "title":"Lưu thông tin",
+                          "payload":"SAVE_CNTT"
+                        },
+                        {
+                            "type":"postback",
+                            "title":"Quay về",
+                            "payload":"TUYEN_SINH"
+                          }
                       ]
                     }
                   }
                 }
+                await callSendAPI(sender_psid, cntt_btn);
             
                 // "quick_replies":[
                 //     {
