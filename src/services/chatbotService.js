@@ -108,7 +108,7 @@ let getStarted_menu = () =>{
                         },
                         {
                             "type":"web_url",
-                            "url": URL_WEBVIEW_DK,
+                            "url": `${URL_WEBVIEW_DK}`,
                             "title": "Đăng ký tư vấn",
                             "webview_height_ratio": "tall",
                             "messenger_extensions": "true"

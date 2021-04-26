@@ -285,11 +285,9 @@ async function handlePostback(sender_psid, received_postback) {
                 "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
                 "quick_replies":[
                 {
-                    "type":"web_url",
-                    "url": URL_WEBVIEW_DK,
-                    "title": "Đăng ký tư vấn",
-                    "webview_height_ratio": "tall",
-                    "messenger_extensions": "true"
+                  "content_type":"text",
+                  "title":"Đăng Ký Tư Vấn Ngay",
+                  "payload":"DANG_KY",
                 },{
                   "content_type":"text",
                   "title":"Tạo Ảnh Thông Tin",
