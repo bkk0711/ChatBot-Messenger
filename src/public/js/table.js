@@ -18,7 +18,7 @@ window.extAsyncInit = function () {
         },
         function error(err) {
             // error
-            console.log('Lỗi đặt bàn Eric bot', err);
+            console.log('Lỗi', err);
         }
     );
 };
@@ -70,7 +70,7 @@ function handleClickButtonReserveTable() {
 
             //send data to node.js server 
             $.ajax({
-                url: `${window.location.origin}/reserve-table-ajax`,
+                url: `${window.location.origin}/P_dang_ky`,
                 method: "POST",
                 data: data,
                 success: function (data) {

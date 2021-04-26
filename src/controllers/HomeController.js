@@ -5,6 +5,9 @@ import chatbotService from "../services/chatbotService";
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const URL_WEBVIEW_DK = process.env.URL_WEBVIEW_DK;
+const PRIVATE_KEY = process.env.PRIVATE_KEY;
+const CLIENT_EMAIL = process.env.CLIENT_EMAIL;
+const SHEET_ID = process.env.SHEET_ID;
 
 //process.env.NAME_VARIABLES
 let getHomePage = (req, res) => {
@@ -469,12 +472,81 @@ let handleRegister = (req, res) =>{
     return res.render('dang_ky.ejs');
 
 }
+let handlePostRegister = async (req, res)  =>{
+    try{
+        let customerName = "";
+        if(req.body.customerName == ""){
+            customerName = await chatbotService.getInfoProfile(req.body.psid, 'full_name');
+        }else customerName = req.body.customerName;
+        let replyreg = {
+            "text": `</----- *Thông tin đăng ký tư vấn* ------/>
+            \nHọ và Tên: ${customerName}
+            \nSố điện thoại: ${req.body.phoneNumber}
+            \nĐịa chỉ Email:  ${req.body.email}`   
+        }
+        await sender_action(req.body.psid);
+        await callSendAPI(req.body.psid, replyreg);
+
+        let replyreg1 = {
+            "text": `Bạn đã đăng ký tư vấn thành công!! 
+            \nBộ phận tuyển sinh sẽ liên lạc và tư vấn cho bạn trong tương lai`   
+        }
+        await sender_action(req.body.psid);
+        await callSendAPI(req.body.psid, replyreg1);
+
+
+    }catch(e){
+        console.log(e);
+    }
+}
+
+let getGoogleSheet = async (req, res) => {
+    try {
+
+        let currentDate = new Date();
+
+        const format = "HH:mm DD/MM/YYYY"
+
+        let formatedDate = moment(currentDate).format(format);
+
+        // Initialize the sheet - doc ID is the long id in the sheets URL
+        const doc = new GoogleSpreadsheet(SHEET_ID);
+
+        // Initialize Auth - see more available options at https://theoephraim.github.io/node-google-spreadsheet/#/getting-started/authentication
+        await doc.useServiceAccountAuth({
+            client_email: CLIENT_EMAIL,
+            private_key: PRIVATE_KEY,
+        });
+
+        await doc.loadInfo(); // loads document properties and worksheets
+
+        const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id] or doc.sheetsByTitle[title]
+
+        // append rows
+        await sheet.addRow(
+            {
+                "Tên Facebook": 'Hỏi Dân IT',
+                "Email": 'haryphamdev@gmail.com',
+                "Số điện thoại": `'0321456789`,
+                "Thời gian": formatedDate,
+                "Tên khách hàng": "Eric"
+            });
+
+
+        return res.send('Writing data to Google Sheet succeeds!')
+    }
+    catch (e) {
+        return res.send('Oops! Something wrongs, check logs console for detail ... ')
+    }
+}
+
 module.exports = {
     getHomePage: getHomePage,
     postWebhook: postWebhook,
     getWebhook: getWebhook,
     setupProfile: setupProfile,
     setupmenu : setupmenu,
-    handleRegister: handleRegister
+    handleRegister: handleRegister,
+    handlePostRegister:handlePostRegister
 
 }

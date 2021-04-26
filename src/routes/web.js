@@ -8,12 +8,15 @@ let initWebRoutes = (app) => {
     router.post("/setup-profile", homeController.setupProfile);
 
     router.post("/setup-menu", homeController.setupmenu);
+   
 
 
     router.post('/webhook', homeController.postWebhook);
     router.get('/webhook', homeController.getWebhook);
 
     router.get('/dang_ky', homeController.handleRegister);
+    router.post("/P_dang_ky", homeController.handlePostRegister);
+
     return app.use('/', router);
 }
 
