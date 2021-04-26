@@ -118,10 +118,6 @@ function handleMessage(sender_psid, received_message) {
         //         }
         //     }
         // }
-    }else if (received_message.quick_replies.payload == 'DANG_KY'){
-         response = {
-            "text": `ban nhannust dang kys`
-        }
     }
 
     // Send the response message
@@ -145,30 +141,28 @@ async function handlePostback(sender_psid, received_postback) {
         case 'TUYEN_SINH':
           // code block
           response = {
-            "attachment": {
-                "type": "template",
-                "payload": {
-                    "template_type": "generic",
-                    "elements": [{
-                        "title": "Thông tin tuyển sinh KHOA CNTT CTUET",
-                        "subtitle": "Tap để chọn ",
-                        "image_url": "",
-                        "buttons": [
-                            {
-                                "type": "postback",
-                                "title": "Các ngành tuyển sinh",
-                                "payload": "CAC_NGANH",
-                            },
-                            {
-                                "type": "postback",
-                                "title": "Hình thức xét tuyển",
-                                "payload": "HINH_THUC",
-                            }
-                        ],
-                    }]
+            "attachment":{
+                "type":"template",
+                "payload":{
+                  "template_type":"button",
+                  "text":"Thông tin tuyển sinh Khoa Công Nghệ Thông Tin CTUET",
+                  "buttons": [
+                    {
+                        "type": "postback",
+                        "title": "Các ngành tuyển sinh",
+                        "payload": "CAC_NGANH",
+                    },
+                    {
+                        "type": "postback",
+                        "title": "Hình thức xét tuyển",
+                        "payload": "HINH_THUC",
+                    }
+                ],
                 }
+              }
             }
-        }
+           
+        
           break;
         case 'CAC_NGANH':
             let response1 = { "text": "Hiện tại *Khoa Công Nghệ Thông Tin* đang tuyển sinh các ngành sau đây  " }
@@ -292,18 +286,37 @@ async function handlePostback(sender_psid, received_postback) {
             // callSendAPI(sender_psid, cntt3);
             let cntt4 = {
                 "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
-                "quick_replies":[
-                {
-                  "content_type":"text",
-                  "title":"Đăng Ký Tư Vấn Ngay",
-                  "payload":"DANG_KY",
-                },{
-                  "content_type":"text",
-                  "title":"Tạo Ảnh Thông Tin",
-                  "payload":"IMG_CNTT",
                 }
-              ]}
-              await setTimeout(() => {callSendQickReplies(sender_psid, cntt4)}, 2000);
+            await callSendAPI(sender_psid, cntt4);
+            let cntt_btn = {
+                "attachment":{
+                    "type":"template",
+                    "payload":{
+                      "template_type":"button",
+                      "text":"",
+                      "buttons":[
+                        {
+                          "type":"postback",
+                          "title":"Postback Button",
+                          "payload":"DEVELOPER_DEFINED_PAYLOAD"
+                        }
+                      ]
+                    }
+                  }
+                }
+            }
+                // "quick_replies":[
+                //     {
+                //       "content_type":"text",
+                //       "title":"Đăng Ký Tư Vấn Ngay",
+                //       "payload":"DANG_KY",
+                //     },{
+                //       "content_type":"text",
+                //       "title":"Tạo Ảnh Thông Tin",
+                //       "payload":"IMG_CNTT",
+                //     }
+                //   ]
+            //   await setTimeout(() => {callSendQickReplies(sender_psid, cntt4)}, 2000);
             // await callSendQickReplies(sender_psid, cntt4);
             break;
         default:
