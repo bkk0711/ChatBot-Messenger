@@ -152,11 +152,11 @@ async function handlePostback(sender_psid, received_postback) {
                         "title": "Các ngành tuyển sinh",
                         "payload": "CAC_NGANH",
                     },
-                    {
-                        "type": "postback",
-                        "title": "Hình thức xét tuyển",
-                        "payload": "HINH_THUC",
-                    }
+                    // {
+                    //     "type": "postback",
+                    //     "title": "Hình thức xét tuyển",
+                    //     "payload": "HINH_THUC",
+                    // }
                 ],
                 }
               }
