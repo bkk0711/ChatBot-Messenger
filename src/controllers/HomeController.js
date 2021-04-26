@@ -304,7 +304,7 @@ async function handlePostback(sender_psid, received_postback) {
                     }
                   }
                 }
-            }
+            
                 // "quick_replies":[
                 //     {
                 //       "content_type":"text",
