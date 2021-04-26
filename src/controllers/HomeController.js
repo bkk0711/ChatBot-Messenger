@@ -507,23 +507,31 @@ Bộ phận tuyển sinh sẽ liên lạc và tư vấn cho bạn trong tương 
         const doc = new GoogleSpreadsheet(SHEET_ID);
 
         // Initialize Auth - see more available options at https://theoephraim.github.io/node-google-spreadsheet/#/getting-started/authentication
+        // for other sẻver
+        // await doc.useServiceAccountAuth({
+        //     client_email: CLIENT_EMAIL,
+        //     private_key: PRIVATE_KEY,
+        // });
+        // for heroku
         await doc.useServiceAccountAuth({
-            client_email: CLIENT_EMAIL,
-            private_key: PRIVATE_KEY,
+            client_email:JSON.parse(`"${CLIENT_EMAIL}"`) ,
+            private_key: JSON.parse(`"${PRIVATE_KEY}"`) ,
         });
 
         await doc.loadInfo(); // loads document properties and worksheets
 
         const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id] or doc.sheetsByTitle[title]
+        let fbName= chatbotService.getInfoProfile(req.body.psid, 'full_name');
         await sheet.addRow(
             {
-                "Tên Facebook": chatbotService.getInfoProfile(req.body.psid, 'full_name'),
-                "Email": req.body.email,
+                "Tên Facebook": fbName,
+                "Email": `${req.body.email}`,
                 "Số điện thoại": `'${req.body.phoneNumber}`,
                 "Thời gian": formatedDate,
                 "Tên khách hàng": customerName
             });
             console.log('write to sheet done');
+
 
     }catch(e){
         console.log(e);
