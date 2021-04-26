@@ -118,6 +118,10 @@ function handleMessage(sender_psid, received_message) {
         //         }
         //     }
         // }
+    }else if (received_message.quick_replies.payload == 'DANG_KY'){
+         response = {
+            "text": `ban nhannust dang kys`
+        }
     }
 
     // Send the response message
