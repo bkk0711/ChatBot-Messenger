@@ -327,6 +327,198 @@ async function handlePostback(sender_psid, received_postback) {
             //   await setTimeout(() => {callSendQickReplies(sender_psid, cntt4)}, 2000);
             // await callSendQickReplies(sender_psid, cntt4);
             break;
+        case 'KHMT':
+            await sender_action(sender_psid);
+            let khmt = {"text": "Thông tin : Ngành Khoa Học Máy Tính"}
+            await callSendAPI(sender_psid, khmt);
+
+            await sender_action(sender_psid);
+
+            let khmt1 = { "text": "Mã trường : KCC"}
+            await callSendAPI(sender_psid, khmt1);
+
+            await sender_action(sender_psid);
+            
+            let khmt2 = { "text": "Mã ngành : 7480101 "}
+            await callSendAPI(sender_psid, khmt2);
+
+            await sender_action(sender_psid);
+            
+            // let cntt3 = {  "text": " " }
+            // callSendAPI(sender_psid, cntt3);
+            let khmt3 = {
+                "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
+                }
+            await callSendAPI(sender_psid, khmt3);
+            await sender_action(sender_psid);
+            await sleep(2000);
+            let khmt_btn = {
+                "attachment":{
+                    "type":"template",
+                    "payload":{
+                      "template_type":"button",
+                      "text":"Xem thêm các thông tin khác ",
+                      "buttons":[
+                        {
+                          "type":"postback",
+                          "title": "Các ngành tuyển sinh",
+                          "payload": "CAC_NGANH",
+                        },
+                        {
+                            "type":"postback",
+                            "title":"Quay về",
+                            "payload":"TUYEN_SINH"
+                          }
+                      ]
+                    }
+                  }
+                }
+                await callSendAPI(sender_psid, khmt_btn);
+            break;
+        case 'KTPM':
+            await sender_action(sender_psid);
+            let ktpm = {"text": "Thông tin : Ngành Kỹ Thuật Phần Mềm"}
+            await callSendAPI(sender_psid, ktpm);
+
+            await sender_action(sender_psid);
+
+            let ktpm1 = { "text": "Mã trường : KCC"}
+            await callSendAPI(sender_psid, ktpm1);
+
+            await sender_action(sender_psid);
+            
+            let ktpm2 = { "text": "Mã ngành : 7480103 "}
+            await callSendAPI(sender_psid, ktpm2);
+
+            await sender_action(sender_psid);
+            
+            // let ktpm3 = {  "text": " " }
+            // callSendAPI(sender_psid, ktpm3);
+            let ktpm4 = {
+                "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
+                }
+            await callSendAPI(sender_psid, ktpm4);
+            await sender_action(sender_psid);
+            await sleep(2000);
+            let ktpm_btn = {
+                "attachment":{
+                    "type":"template",
+                    "payload":{
+                      "template_type":"button",
+                      "text":"Xem thêm các thông tin khác ",
+                      "buttons":[
+                        {
+                          "type":"postback",
+                          "title": "Các ngành tuyển sinh",
+                          "payload": "CAC_NGANH",
+                        },
+                        {
+                            "type":"postback",
+                            "title":"Quay về",
+                            "payload":"TUYEN_SINH"
+                          }
+                      ]
+                    }
+                  }
+                }
+                await callSendAPI(sender_psid, ktpm_btn);
+            break;
+        case 'HTTT':
+            await sender_action(sender_psid);
+            let httt = {"text": "Thông tin : Ngành Hệ Thống Thông Tin"}
+            await callSendAPI(sender_psid, httt);
+
+            await sender_action(sender_psid);
+
+            let httt1 = { "text": "Mã trường : KCC"}
+            await callSendAPI(sender_psid, httt1);
+
+            await sender_action(sender_psid);
+            
+            let httt2 = { "text": "Mã ngành : 7480104 "}
+            await callSendAPI(sender_psid, httt2);
+
+            await sender_action(sender_psid);
+            
+            // let httt3 = {  "text": " " }
+            // callSendAPI(sender_psid, httt3);
+            let httt4 = {
+                "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
+                }
+            await callSendAPI(sender_psid, httt4);
+            await sender_action(sender_psid);
+            await sleep(2000);
+            let httt_btn = {
+                "attachment":{
+                    "type":"template",
+                    "payload":{
+                      "template_type":"button",
+                      "text":"Xem thêm các thông tin khác ",
+                      "buttons":[
+                        {
+                          "type":"postback",
+                          "title": "Các ngành tuyển sinh",
+                          "payload": "CAC_NGANH",
+                        },
+                        {
+                            "type":"postback",
+                            "title":"Quay về",
+                            "payload":"TUYEN_SINH"
+                          }
+                      ]
+                    }
+                  }
+                }
+                await callSendAPI(sender_psid, httt_btn);
+            break;
+        case 'KHDL':
+            await sender_action(sender_psid);
+            let khdl = {"text": "Thông tin : Ngành Khoa Học Dữ Liệu"}
+            await callSendAPI(sender_psid, khdl);
+
+            await sender_action(sender_psid);
+
+            let khdl1 = { "text": "Mã trường : KCC"}
+            await callSendAPI(sender_psid, khdl1);
+
+            await sender_action(sender_psid);
+            
+            let khdl2 = { "text": "Mã ngành : 7480109"}
+            await callSendAPI(sender_psid, khdl2);
+
+            await sender_action(sender_psid);
+            
+            // let khdl3 = {  "text": " " }
+            // callSendAPI(sender_psid, khdl3);
+            let khdl4 = {
+                "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
+                }
+            await callSendAPI(sender_psid, khdl4);
+            await sender_action(sender_psid);
+            await sleep(2000);
+            let khdl_btn = {
+                "attachment":{
+                    "type":"template",
+                    "payload":{
+                      "template_type":"button",
+                      "text":"Xem thêm các thông tin khác ",
+                      "buttons":[
+                        {
+                          "type":"postback",
+                          "title": "Các ngành tuyển sinh",
+                          "payload": "CAC_NGANH",
+                        },
+                        {
+                            "type":"postback",
+                            "title":"Quay về",
+                            "payload":"TUYEN_SINH"
+                          }
+                      ]
+                    }
+                  }
+                }
+                await callSendAPI(sender_psid, khdl_btn);
+                break; 
         default:
           // code block
       }
