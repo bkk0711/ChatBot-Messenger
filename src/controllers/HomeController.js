@@ -288,17 +288,19 @@ async function handlePostback(sender_psid, received_postback) {
                 "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
                 }
             await callSendAPI(sender_psid, cntt4);
+            await sender_action(sender_psid);
+            await sleep(2000);
             let cntt_btn = {
                 "attachment":{
                     "type":"template",
                     "payload":{
                       "template_type":"button",
-                      "text":"",
+                      "text":"Xem thêm các thông tin khác ",
                       "buttons":[
                         {
                           "type":"postback",
-                          "title":"Lưu thông tin",
-                          "payload":"SAVE_CNTT"
+                          "title": "Các ngành tuyển sinh",
+                          "payload": "CAC_NGANH",
                         },
                         {
                             "type":"postback",
@@ -385,7 +387,11 @@ function callSendAPI(sender_psid, response) {
         }
     });
 }
-
+function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }   
 function callSendQickReplies(sender_psid, response) {
     // Construct the message body
     let request_body = {
