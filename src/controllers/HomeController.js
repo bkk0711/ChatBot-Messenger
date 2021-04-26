@@ -521,15 +521,15 @@ Bộ phận tuyển sinh sẽ liên lạc và tư vấn cho bạn trong tương 
         await doc.loadInfo(); // loads document properties and worksheets
 
         const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id] or doc.sheetsByTitle[title]
-        let fbName= chatbotService.getInfoProfile(req.body.psid, 'full_name');
-        // await sheet.addRow(
-        //     {
-        //         "Tên Facebook": fbName,
-        //         "Email": `${req.body.email}`,
-        //         "Số điện thoại": `'${req.body.phoneNumber}`,
-        //         "Thời gian": formatedDate,
-        //         "Tên khách hàng": customerName
-        //     });
+        let fbName = await chatbotService.getInfoProfile(req.body.psid, 'full_name');
+        await sheet.addRow(
+            {
+                "Tên Facebook": fbName,
+                "Email": `${req.body.email}`,
+                "Số điện thoại": `'${req.body.phoneNumber}`,
+                "Thời gian": formatedDate,
+                "Tên khách hàng": customerName
+            });
             await sheet.addRow(
                 {
                     "Tên Facebook": 'Hỏi Dân IT',
