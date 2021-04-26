@@ -1,6 +1,8 @@
 require('dotenv').config();
 import request from "request";
 import chatbotService from "../services/chatbotService";
+const moment = require("moment");
+const { GoogleSpreadsheet } = require('google-spreadsheet');
 
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
@@ -489,10 +491,38 @@ let handlePostRegister = async (req, res)  =>{
 
         let replyreg1 = {
             "text": `Bạn đã đăng ký tư vấn thành công!! 
-            \nBộ phận tuyển sinh sẽ liên lạc và tư vấn cho bạn trong tương lai`   
+            Bộ phận tuyển sinh sẽ liên lạc và tư vấn cho bạn trong tương lai`   
         }
         await sender_action(req.body.psid);
         await callSendAPI(req.body.psid, replyreg1);
+
+        // write to sheet
+        let currentDate = new Date();
+
+        const format = "HH:mm DD/MM/YYYY"
+
+        let formatedDate = moment(currentDate).format(format);
+
+        // Initialize the sheet - doc ID is the long id in the sheets URL
+        const doc = new GoogleSpreadsheet(SHEET_ID);
+
+        // Initialize Auth - see more available options at https://theoephraim.github.io/node-google-spreadsheet/#/getting-started/authentication
+        await doc.useServiceAccountAuth({
+            client_email: CLIENT_EMAIL,
+            private_key: PRIVATE_KEY,
+        });
+
+        await doc.loadInfo(); // loads document properties and worksheets
+
+        const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id] or doc.sheetsByTitle[title]
+        await sheet.addRow(
+            {
+                "Tên Facebook": chatbotService.getInfoProfile(req.body.psid, 'full_name'),
+                "Email": req.body.email,
+                "Số điện thoại": `'${req.body.phoneNumber}`,
+                "Thời gian": formatedDate,
+                "Tên khách hàng": customerName
+            });
 
 
     }catch(e){
