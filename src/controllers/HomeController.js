@@ -522,14 +522,22 @@ Bộ phận tuyển sinh sẽ liên lạc và tư vấn cho bạn trong tương 
 
         const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id] or doc.sheetsByTitle[title]
         let fbName= chatbotService.getInfoProfile(req.body.psid, 'full_name');
-        await sheet.addRow(
-            {
-                "Tên Facebook": fbName,
-                "Email": `${req.body.email}`,
-                "Số điện thoại": `'${req.body.phoneNumber}`,
-                "Thời gian": formatedDate,
-                "Tên khách hàng": customerName
-            });
+        // await sheet.addRow(
+        //     {
+        //         "Tên Facebook": fbName,
+        //         "Email": `${req.body.email}`,
+        //         "Số điện thoại": `'${req.body.phoneNumber}`,
+        //         "Thời gian": formatedDate,
+        //         "Tên khách hàng": customerName
+        //     });
+            await sheet.addRow(
+                {
+                    "Tên Facebook": 'Hỏi Dân IT',
+                    "Email": 'haryphamdev@gmail.com',
+                    "Số điện thoại": `'0321456789`,
+                    "Thời gian": formatedDate,
+                    "Tên khách hàng": "Eric"
+                });
             console.log('write to sheet done');
 
 
