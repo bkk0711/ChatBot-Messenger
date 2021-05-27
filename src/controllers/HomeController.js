@@ -293,11 +293,18 @@ async function handlePostback(sender_psid, received_postback) {
 
             break;
         case 'PT2':
+            await sender_action(sender_psid);
             response = { "text": "*Xét tuyển kết quả kỳ thi tốt nghiệp THPT 2021* \n Điểm xét tuyển bằng tổng điểm ba môn thi tốt nghiệp THPT trong tổ hợp xét tuyển công điểm ưu tiên khu vực, đối tượng " }
             break;
         case 'PT3':
+            await sender_action(sender_psid);
+            response = { "text": "*Xét tuyển Sử dụng kết quả thi đánh giá năng lực 2021 do ĐH Quốc gia Hồ Chí Minh tổ chức * \n Điểm xét tuyển là điểm bài thi đánh giá năng lực từ 600 điểm trở lên" }
+          
             break;
         case 'PT4':
+            await sender_action(sender_psid);
+            response = { "text": "*Tuyển thẳng theo quy định Bộ Giáo dục và Đào tạo* \n Tuyển thẳng thí sinh đạt giải kỳ thi cấp quốc gia, quốc tế, học sinh có học lực lớp 10, 11, 12 đạt loại khá và hạnh kiểm xếp loại tốt trở lên" }
+          
             break;    
         case 'LIEN_HE':
             await sender_action(sender_psid);
