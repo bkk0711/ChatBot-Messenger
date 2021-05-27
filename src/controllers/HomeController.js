@@ -288,7 +288,7 @@ async function handlePostback(sender_psid, received_postback) {
                     "payload":"TDC2"
                   }
               ]}
-            await setTimeout(() => {callSendAPI(sender_psid, c2)}, 1000);
+            await setTimeout(() => {callSendQickReplies(sender_psid, c2)}, 1000);
 
 
             break;
@@ -299,6 +299,9 @@ async function handlePostback(sender_psid, received_postback) {
         case 'PT4':
             break;    
         case 'LIEN_HE':
+            await sender_action(sender_psid);
+            let lienhe = {"text": "Phòng Đào Tạo : Số 256, đường Nguyễn Văn Cừ, phường AN Hòa, quận Ninh Kiều, TP Cần Thơ \n Số điện thoại : 0292.3898167 "}
+            await callSendAPI(sender_psid, lienhe);
 
             break;
         case 'CNTT':
