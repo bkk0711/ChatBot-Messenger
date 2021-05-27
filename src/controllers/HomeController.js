@@ -128,6 +128,17 @@ async function handleMessage(sender_psid, received_message) {
             response = { "text": "*Tuyển thẳng theo quy định Bộ Giáo dục và Đào tạo* \n Tuyển thẳng thí sinh đạt giải kỳ thi cấp quốc gia, quốc tế, học sinh có học lực lớp 10, 11, 12 đạt loại khá và hạnh kiểm xếp loại tốt trở lên" }
           
             break;  
+        case 'HD_PT1':
+            response = {
+                "attachment":{
+                    "type":"image", 
+                    "payload":{
+                      "url":"https://tuyensinh.ctuet.edu.vn/media/o1XF_nz7qYOroCmv_Rmo41XrYyCKNTarek3c1xnmGY0SHrW6nUZ0FMIzPcUFC8J-Tq6WELjIy2CUGzSz2fB_u9KSRna4NoXpImzi2y7fFsw.jpg", 
+                      "is_reusable":true
+                    }
+                  }
+            }
+            break;
             default:
                
     }
