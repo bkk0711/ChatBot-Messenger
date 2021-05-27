@@ -273,7 +273,7 @@ async function handlePostback(sender_psid, received_postback) {
             break;
         case 'PT1':
             await sender_action(sender_psid);
-            let c1 = {"text": "Cách 1 : Điểm xét tuyển bằng tổng điểm trung bình lớp 10 11 và học kì 1 lớp 12 của 3 môn trong tổ hợp môn xét tuyển đạt từ 18 điểm trở lên ( làm tròn đến số thập phân thứ 2 )"}
+            let c1 = {"text": "*Sử dụng kết quả học bạ THPT* \n Cách 1 : Điểm xét tuyển bằng tổng điểm trung bình lớp 10 11 và học kì 1 lớp 12 của 3 môn trong tổ hợp môn xét tuyển đạt từ 18 điểm trở lên ( làm tròn đến số thập phân thứ 2 )"}
             await callSendAPI(sender_psid, c1);
             await sender_action(sender_psid);
             let c2 = {"text": "Cách 2 : Điểm xét tuyển bằng tổng điểm trung bình cả năm lớp 12 của 3 môn trong tổ hợp môn xét tuyển từ 18 điểm trở lên ( làm tròn đến số thập phân thứ 2 )",
@@ -293,6 +293,7 @@ async function handlePostback(sender_psid, received_postback) {
 
             break;
         case 'PT2':
+            response = { "text": "*Xét tuyển kết quả kỳ thi tốt nghiệp THPT 2021* \n Điểm xét tuyển bằng tổng điểm ba môn thi tốt nghiệp THPT trong tổ hợp xét tuyển công điểm ưu tiên khu vực, đối tượng " }
             break;
         case 'PT3':
             break;
