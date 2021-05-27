@@ -243,31 +243,22 @@ async function handlePostback(sender_psid, received_postback) {
                 
           break;
         case 'HINH_THUC':
-            response = {
-                "attachment": {
-                    "type": "template",
-                    "payload": {
-                        "template_type": "generic",
-                        "elements": [{
-                            "title": "Các hình thức xét tuyển",
-                            "subtitle": "Tap để chọn ",
-                            "image_url": "",
-                            "buttons": [
-                                {
-                                    "type": "postback",
-                                    "title": "Bằng học bạ",
-                                    "payload": "XT_HOCBA",
-                                },
-                                {
-                                    "type": "postback",
-                                    "title": "Bằng điểm thi THPTQG",
-                                    "payload": "XT_DIEMTHI",
-                                }
-                            ],
-                        }]
+            await sender_action(sender_psid);
+            response1 = {"text": "Hiện tại trường đang có 4 phương thức xét tuyển : \n 1. Sử dụng kết quả thi THPTQG \n 2. Sử dụng kết quả kì thi tốt nghiệp THPT 2021 \n 3.Sử dụng kết quả thi đánh giá năng lực 2021 do ĐH Quốc gia Hồ Chí Minh tổ chức  \n 4. Tuyển thẳng "}
+            await sender_action(sender_psid);
+           q_repht = { "quick_replies":[
+                    {
+                      "content_type":"text",
+                      "title":"Đăng Ký Tư Vấn Ngay",
+                      "payload":"DANG_KY",
+                    },{
+                      "content_type":"text",
+                      "title":"Tạo Ảnh Thông Tin",
+                      "payload":"IMG_CNTT",
                     }
-                }
-            }
+                  ]}
+                  callSendQickReplies(sender_psid, q_repht)
+           // await setTimeout(() => {callSendQickReplies(sender_psid, q_repht)}, 2000);
             break;
         case 'CNTT':
             await sender_action(sender_psid);
