@@ -108,6 +108,11 @@ let getStarted_menu = () =>{
                             "payload": "TUYEN_SINH",
                         },
                         {
+                            "type": "postback",
+                            "title": "Thông tin liên hệ",
+                            "payload": "LIEN_HE",
+                        },
+                        {
                             "type":"web_url",
                             "url": `${URL_WEBVIEW_DK}`,
                             "title": "Đăng ký tư vấn",
