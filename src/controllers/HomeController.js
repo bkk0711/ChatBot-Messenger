@@ -245,8 +245,10 @@ async function handlePostback(sender_psid, received_postback) {
         case 'HINH_THUC':
             await sender_action(sender_psid);
             response1 = {"text": "Hiện tại trường đang có 4 phương thức xét tuyển : \n 1. Sử dụng kết quả thi THPTQG \n 2. Sử dụng kết quả kì thi tốt nghiệp THPT 2021 \n 3.Sử dụng kết quả thi đánh giá năng lực 2021 do ĐH Quốc gia Hồ Chí Minh tổ chức  \n 4. Tuyển thẳng "}
+            await callSendAPI(sender_psid, response1);
+
             await sender_action(sender_psid);
-           q_repht = { "quick_replies":[
+           let q_repht = { "quick_replies":[
                     {
                       "content_type":"text",
                       "title":"Phương thức 1",
