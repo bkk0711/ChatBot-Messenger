@@ -106,7 +106,7 @@ async function handleMessage(sender_psid, received_message) {
                     "title":"Tính điểm cách 2",
                     "payload":"TDC2"
                   },
-                  ,{
+                  {
                     "content_type":"text",
                     "title":"Hướng dẫn xét tuyển",
                     "payload":"HD_PT1"
