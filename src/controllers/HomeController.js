@@ -156,11 +156,11 @@ async function handlePostback(sender_psid, received_postback) {
                         "title": "Các ngành tuyển sinh",
                         "payload": "CAC_NGANH",
                     },
-                    // {
-                    //     "type": "postback",
-                    //     "title": "Hình thức xét tuyển",
-                    //     "payload": "HINH_THUC",
-                    // }
+                    {
+                        "type": "postback",
+                        "title": "Hình thức xét tuyển",
+                        "payload": "HINH_THUC",
+                    }
                 ],
                 }
               }
@@ -307,6 +307,13 @@ async function handlePostback(sender_psid, received_postback) {
                           "payload": "CAC_NGANH",
                         },
                         {
+                            "type":"web_url",
+                            "url": `${URL_WEBVIEW_CNTT}`,
+                            "title": "Xem Chi tiết",
+                            "webview_height_ratio": "tall",
+                            "messenger_extensions": "true"
+                        },
+                        {
                             "type":"postback",
                             "title":"Quay về",
                             "payload":"TUYEN_SINH"
@@ -424,6 +431,13 @@ async function handlePostback(sender_psid, received_postback) {
                           "payload": "CAC_NGANH",
                         },
                         {
+                            "type":"web_url",
+                            "url": `${URL_WEBVIEW_KTPM}`,
+                            "title": "Xem Chi tiết",
+                            "webview_height_ratio": "tall",
+                            "messenger_extensions": "true"
+                        },
+                        {
                             "type":"postback",
                             "title":"Quay về",
                             "payload":"TUYEN_SINH"
@@ -472,6 +486,13 @@ async function handlePostback(sender_psid, received_postback) {
                           "payload": "CAC_NGANH",
                         },
                         {
+                            "type":"web_url",
+                            "url": `${URL_WEBVIEW_HTTT}`,
+                            "title": "Xem Chi tiết",
+                            "webview_height_ratio": "tall",
+                            "messenger_extensions": "true"
+                        },
+                        {
                             "type":"postback",
                             "title":"Quay về",
                             "payload":"TUYEN_SINH"
@@ -518,6 +539,13 @@ async function handlePostback(sender_psid, received_postback) {
                           "type":"postback",
                           "title": "Các ngành tuyển sinh",
                           "payload": "CAC_NGANH",
+                        },
+                        {
+                            "type":"web_url",
+                            "url": `${URL_WEBVIEW_KHDL}`,
+                            "title": "Xem Chi tiết",
+                            "webview_height_ratio": "tall",
+                            "messenger_extensions": "true"
                         },
                         {
                             "type":"postback",

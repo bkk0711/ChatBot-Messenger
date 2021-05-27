@@ -22,6 +22,18 @@ let initWebRoutes = (app) => {
     router.get('/khmt', (req, res) => {
         res.render('khmt.ejs');
     });
+    router.get('/khdl', (req, res) => {
+        res.render('khdl.ejs');
+    });
+    router.get('/cntt', (req, res) => {
+        res.render('cntt.ejs');
+    });
+    router.get('/ktpm', (req, res) => {
+        res.render('ktpm.ejs');
+    });
+    router.get('/httt', (req, res) => {
+        res.render('httt.ejs');
+    });
 
 
     return app.use('/', router);
