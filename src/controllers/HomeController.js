@@ -83,7 +83,7 @@ let getWebhook = (req, res) => {
 }
 
 // Handles messages events
-function handleMessage(sender_psid, received_message) {
+async function handleMessage(sender_psid, received_message) {
 
     let response;
     let q_payload = received_message.quick_reply.payload;
@@ -105,6 +105,11 @@ function handleMessage(sender_psid, received_message) {
                     "content_type":"text",
                     "title":"Tính điểm cách 2",
                     "payload":"TDC2"
+                  },
+                  ,{
+                    "content_type":"text",
+                    "title":"Hướng dẫn xét tuyển",
+                    "payload":"HD_PT1"
                   }
               ]}
             await setTimeout(() => {callSendQickReplies(sender_psid, c2)}, 1000);
