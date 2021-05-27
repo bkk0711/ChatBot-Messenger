@@ -134,48 +134,51 @@ async function handlePostback(sender_psid, received_postback) {
 
     // Get the payload for the postback
     let payload = received_postback.payload;
-    let q_payload = received_postback.quick_reply.payload;
+    if(received_postback.quick_reply.payload){
+        let q_payload = received_postback.quick_reply.payload;
 
-    // Set the response based on the postback payload
-    switch(q_payload){
-        case 'PT1':
-            await sender_action(sender_psid);
-            let c1 = {"text": "*Sử dụng kết quả học bạ THPT* \n Cách 1 : Điểm xét tuyển bằng tổng điểm trung bình lớp 10 11 và học kì 1 lớp 12 của 3 môn trong tổ hợp môn xét tuyển đạt từ 18 điểm trở lên ( làm tròn đến số thập phân thứ 2 )"}
-            await callSendAPI(sender_psid, c1);
-            await sender_action(sender_psid);
-            let c2 = {"text": "Cách 2 : Điểm xét tuyển bằng tổng điểm trung bình cả năm lớp 12 của 3 môn trong tổ hợp môn xét tuyển từ 18 điểm trở lên ( làm tròn đến số thập phân thứ 2 )",
-            "quick_replies":[
-                {
-                  "content_type":"text",
-                  "title":"Tính điểm cách 1",
-                  "payload":"TDC1"
-                },{
-                    "content_type":"text",
-                    "title":"Tính điểm cách 2",
-                    "payload":"TDC2"
-                  }
-              ]}
-            await setTimeout(() => {callSendQickReplies(sender_psid, c2)}, 1000);
-
-
-            break;
-        case 'PT2':
-            await sender_action(sender_psid);
-            response = { "text": "*Xét tuyển kết quả kỳ thi tốt nghiệp THPT 2021* \n Điểm xét tuyển bằng tổng điểm ba môn thi tốt nghiệp THPT trong tổ hợp xét tuyển công điểm ưu tiên khu vực, đối tượng " }
-            break;
-        case 'PT3':
-            await sender_action(sender_psid);
-            response = { "text": "*Xét tuyển Sử dụng kết quả thi đánh giá năng lực 2021 do ĐH Quốc gia Hồ Chí Minh tổ chức * \n Điểm xét tuyển là điểm bài thi đánh giá năng lực từ 600 điểm trở lên" }
-          
-            break;
-        case 'PT4':
-            await sender_action(sender_psid);
-            response = { "text": "*Tuyển thẳng theo quy định Bộ Giáo dục và Đào tạo* \n Tuyển thẳng thí sinh đạt giải kỳ thi cấp quốc gia, quốc tế, học sinh có học lực lớp 10, 11, 12 đạt loại khá và hạnh kiểm xếp loại tốt trở lên" }
-          
-            break;  
-            default:
-               
+        // Set the response based on the postback payload
+        switch(q_payload){
+            case 'PT1':
+                await sender_action(sender_psid);
+                let c1 = {"text": "*Sử dụng kết quả học bạ THPT* \n Cách 1 : Điểm xét tuyển bằng tổng điểm trung bình lớp 10 11 và học kì 1 lớp 12 của 3 môn trong tổ hợp môn xét tuyển đạt từ 18 điểm trở lên ( làm tròn đến số thập phân thứ 2 )"}
+                await callSendAPI(sender_psid, c1);
+                await sender_action(sender_psid);
+                let c2 = {"text": "Cách 2 : Điểm xét tuyển bằng tổng điểm trung bình cả năm lớp 12 của 3 môn trong tổ hợp môn xét tuyển từ 18 điểm trở lên ( làm tròn đến số thập phân thứ 2 )",
+                "quick_replies":[
+                    {
+                      "content_type":"text",
+                      "title":"Tính điểm cách 1",
+                      "payload":"TDC1"
+                    },{
+                        "content_type":"text",
+                        "title":"Tính điểm cách 2",
+                        "payload":"TDC2"
+                      }
+                  ]}
+                await setTimeout(() => {callSendQickReplies(sender_psid, c2)}, 1000);
+    
+    
+                break;
+            case 'PT2':
+                await sender_action(sender_psid);
+                response = { "text": "*Xét tuyển kết quả kỳ thi tốt nghiệp THPT 2021* \n Điểm xét tuyển bằng tổng điểm ba môn thi tốt nghiệp THPT trong tổ hợp xét tuyển công điểm ưu tiên khu vực, đối tượng " }
+                break;
+            case 'PT3':
+                await sender_action(sender_psid);
+                response = { "text": "*Xét tuyển Sử dụng kết quả thi đánh giá năng lực 2021 do ĐH Quốc gia Hồ Chí Minh tổ chức * \n Điểm xét tuyển là điểm bài thi đánh giá năng lực từ 600 điểm trở lên" }
+              
+                break;
+            case 'PT4':
+                await sender_action(sender_psid);
+                response = { "text": "*Tuyển thẳng theo quy định Bộ Giáo dục và Đào tạo* \n Tuyển thẳng thí sinh đạt giải kỳ thi cấp quốc gia, quốc tế, học sinh có học lực lớp 10, 11, 12 đạt loại khá và hạnh kiểm xếp loại tốt trở lên" }
+              
+                break;  
+                default:
+                   
+        }
     }
+   
     switch(payload) {
         case 'RESET':
         case 'GET_STARTED':
