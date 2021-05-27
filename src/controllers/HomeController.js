@@ -133,8 +133,7 @@ async function handleMessage(sender_psid, received_message) {
                 "attachment":{
                     "type":"image", 
                     "payload":{
-                      "url":"https://tuyensinh.ctuet.edu.vn/media/o1XF_nz7qYOroCmv_Rmo41XrYyCKNTarek3c1xnmGY0SHrW6nUZ0FMIzPcUFC8J-Tq6WELjIy2CUGzSz2fB_u9KSRna4NoXpImzi2y7fFsw.jpg", 
-                      "is_reusable":true
+                      "url":"https://tuyensinh.ctuet.edu.vn/media/o1XF_nz7qYOroCmv_Rmo41XrYyCKNTarek3c1xnmGY0SHrW6nUZ0FMIzPcUFC8J-Tq6WELjIy2CUGzSz2fB_u9KSRna4NoXpImzi2y7fFsw.jpg"
                     }
                   }
             }
