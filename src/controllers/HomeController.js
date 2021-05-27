@@ -249,13 +249,23 @@ async function handlePostback(sender_psid, received_postback) {
            q_repht = { "quick_replies":[
                     {
                       "content_type":"text",
-                      "title":"Đăng Ký Tư Vấn Ngay",
-                      "payload":"DANG_KY",
+                      "title":"Phương thức 1",
+                      "payload":"PT1"
                     },{
-                      "content_type":"text",
-                      "title":"Tạo Ảnh Thông Tin",
-                      "payload":"IMG_CNTT",
-                    }
+                        "content_type":"text",
+                        "title":"Phương thức 2",
+                        "payload":"PT2"
+                      },
+                      {
+                        "content_type":"text",
+                        "title":"Phương thức 3",
+                        "payload":"PT3"
+                      },
+                      {
+                        "content_type":"text",
+                        "title":"Phương thức 4",
+                        "payload":"PT4"
+                      }
                   ]}
                   callSendQickReplies(sender_psid, q_repht)
            // await setTimeout(() => {callSendQickReplies(sender_psid, q_repht)}, 2000);
