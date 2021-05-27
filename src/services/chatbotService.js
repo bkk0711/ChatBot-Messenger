@@ -72,13 +72,13 @@ let callSendAPI = (sender_psid, response) => {
 let handleGetStarted = (sender_psid) =>{
     return new Promise(async (resolve, reject) => {
         try{
-            //  await sender_action(sender_psid);
-            // let fullname = await getInfoProfile(sender_psid, 'full_name');
-            // let response = { "text": `Xin chào ${fullname} ! `}
+             await sender_action(sender_psid);
+            let fullname = await getInfoProfile(sender_psid, 'full_name');
+            let response = { "text": `Xin chào ${fullname} ! `}
         
-            // await callSendAPI(sender_psid, response);
+            await callSendAPI(sender_psid, response);
             await sender_action(sender_psid);
-            let response0 = { "text": `Xin chào ${fullname} ! \n Cảm ơn bạn đã ghé thăm Fanpage Khoa Công Nghệ Thông Tin | Trường đại học Kỹ thuật - Công nghệ Cần Thơ ! `}
+            let response0 = { "text":  `Cảm ơn bạn đã ghé thăm Fanpage Khoa Công Nghệ Thông Tin | Trường đại học Kỹ thuật - Công nghệ Cần Thơ ! `}
         
             await callSendAPI(sender_psid, response0);
             await sender_action(sender_psid);
