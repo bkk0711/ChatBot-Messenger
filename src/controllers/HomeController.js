@@ -10,7 +10,11 @@ const URL_WEBVIEW_DK = process.env.URL_WEBVIEW_DK;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const CLIENT_EMAIL = process.env.CLIENT_EMAIL;
 const SHEET_ID = process.env.SHEET_ID;
-
+const URL_WEBVIEW_KHMT = process.env.URL_WEBVIEW_KHMT;
+const URL_WEBVIEW_CNTT = process.env.URL_WEBVIEW_CNTT;
+const URL_WEBVIEW_KTPM = process.env.URL_WEBVIEW_KTPM;
+const URL_WEBVIEW_HTTT = process.env.URL_WEBVIEW_HTTT;
+const URL_WEBVIEW_KHDL = process.env.URL_WEBVIEW_KHDL;
 //process.env.NAME_VARIABLES
 let getHomePage = (req, res) => {
     return res.render('homepage.ejs');
@@ -179,7 +183,7 @@ async function handlePostback(sender_psid, received_postback) {
                             "buttons": [
                                 {
                                     "type": "postback",
-                                    "title": "Xem chi tiết",
+                                    "title": "Thông tin",
                                     "payload": "CNTT",
                                 }
                             ]
@@ -191,7 +195,7 @@ async function handlePostback(sender_psid, received_postback) {
                             "buttons": [
                                 {
                                     "type": "postback",
-                                    "title": "Xem chi tiết",
+                                    "title": "Thông tin",
                                     "payload": "KHMT",
                                 }
                             ]
@@ -203,7 +207,7 @@ async function handlePostback(sender_psid, received_postback) {
                             "buttons": [
                                 {
                                     "type": "postback",
-                                    "title": "Xem chi tiết",
+                                    "title": "Thông tin",
                                     "payload": "KTPM",
                                 }
                             ]
@@ -215,7 +219,7 @@ async function handlePostback(sender_psid, received_postback) {
                             "buttons": [
                                 {
                                     "type": "postback",
-                                    "title": "Xem chi tiết",
+                                    "title": "Thông tin",
                                     "payload": "HTTT",
                                 }
                             ]
@@ -227,7 +231,7 @@ async function handlePostback(sender_psid, received_postback) {
                             "buttons": [
                                 {
                                     "type": "postback",
-                                    "title": "Xem chi tiết",
+                                    "title": "Thông tin",
                                     "payload": "KHDL",
                                 }
                             ]
@@ -363,6 +367,13 @@ async function handlePostback(sender_psid, received_postback) {
                           "type":"postback",
                           "title": "Các ngành tuyển sinh",
                           "payload": "CAC_NGANH",
+                        },
+                        {
+                            "type":"web_url",
+                            "url": `${URL_WEBVIEW_KHMT}`,
+                            "title": "Xem Chi tiết",
+                            "webview_height_ratio": "tall",
+                            "messenger_extensions": "true"
                         },
                         {
                             "type":"postback",
@@ -799,6 +810,7 @@ let getGoogleSheet = async (req, res) => {
         return res.send('Oops! Something wrongs, check logs console for detail ... ')
     }
 }
+
 
 module.exports = {
     getHomePage: getHomePage,

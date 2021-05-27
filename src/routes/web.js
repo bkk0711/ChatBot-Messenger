@@ -1,3 +1,4 @@
+import { render } from "ejs";
 import express from "express";
 import homeController from "../controllers/HomeController";
 
@@ -16,6 +17,12 @@ let initWebRoutes = (app) => {
 
     router.get('/dang_ky', homeController.handleRegister);
     router.post("/P_dang_ky", homeController.handlePostRegister);
+
+
+    router.get('/khmt', (req, res) => {
+        res.render('khmt.ejs');
+    });
+
 
     return app.use('/', router);
 }
