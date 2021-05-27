@@ -95,7 +95,7 @@ async function handleMessage(sender_psid, received_message) {
             let c1 = {"text": "*Sử dụng kết quả học bạ THPT* \n Cách 1 : Điểm xét tuyển bằng tổng điểm trung bình lớp 10 11 và học kì 1 lớp 12 của 3 môn trong tổ hợp môn xét tuyển đạt từ 18 điểm trở lên ( làm tròn đến số thập phân thứ 2 )"}
             await callSendAPI(sender_psid, c1);
             await sender_action(sender_psid);
-            let c2 = {"text": "Cách 2 : Điểm xét tuyển bằng tổng điểm trung bình cả năm lớp 12 của 3 môn trong tổ hợp môn xét tuyển từ 18 điểm trở lên ( làm tròn đến số thập phân thứ 2 )",
+            let c2 = {"text": "*Sử dụng kết quả học bạ THPT* \n Cách 2 : Điểm xét tuyển bằng tổng điểm trung bình cả năm lớp 12 của 3 môn trong tổ hợp môn xét tuyển từ 18 điểm trở lên ( làm tròn đến số thập phân thứ 2 )",
             "quick_replies":[
                 {
                   "content_type":"text",
@@ -112,9 +112,7 @@ async function handleMessage(sender_psid, received_message) {
                     "payload":"HD_PT1"
                   }
               ]}
-            await setTimeout(() => {callSendQickReplies(sender_psid, c2)}, 1000);
-
-
+            await callSendQickReplies(sender_psid, c2);
             break;
         case 'PT2':
             await sender_action(sender_psid);
@@ -207,11 +205,7 @@ async function handlePostback(sender_psid, received_postback) {
                         "title": "Hình thức xét tuyển",
                         "payload": "HINH_THUC",
                     },
-                    {
-                        "type": "postback",
-                        "title": "Hướng dẫn xét tuyển bằng học bạ",
-                        "payload": "HINH_THUC",
-                    }
+
                 ],
                 }
               }
