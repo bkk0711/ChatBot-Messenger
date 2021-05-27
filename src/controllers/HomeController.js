@@ -244,8 +244,6 @@ async function handlePostback(sender_psid, received_postback) {
           break;
         case 'HINH_THUC':
             await sender_action(sender_psid);
-           
-            await callSendAPI(sender_psid, response1);
 
             await sender_action(sender_psid);
            let q_repht = { "text": "Hiện tại trường đang có 4 phương thức xét tuyển : \n 1. Sử dụng kết quả thi THPTQG \n 2. Sử dụng kết quả kì thi tốt nghiệp THPT 2021 \n 3.Sử dụng kết quả thi đánh giá năng lực 2021 do ĐH Quốc gia Hồ Chí Minh tổ chức  \n 4. Tuyển thẳng ",
