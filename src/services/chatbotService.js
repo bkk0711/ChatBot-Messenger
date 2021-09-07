@@ -74,11 +74,11 @@ let handleGetStarted = (sender_psid) =>{
         try{
             
             let fullname = await getInfoProfile(sender_psid, 'full_name');
-            let response = { "text": `Xin chào ${fullname} ! `}
+            let response = { "text": `Cô Mèo chào ${fullname} ! `}
         
             await callSendAPI(sender_psid, response);
           
-            let response0 = { "text":  `Cảm ơn bạn đã ghé thăm Fanpage Khoa Công Nghệ Thông Tin | Trường đại học Kỹ thuật - Công nghệ Cần Thơ ! `}
+            let response0 = { "text":  `Cô Mèo sẽ giải đáp các thắc mắc của các bạn về thông tin của trường và các biểu mẫu tài liệu ! `}
         
             await callSendAPI(sender_psid, response0);
             
@@ -98,27 +98,28 @@ let getStarted_menu = () =>{
             "payload": {
                 "template_type": "generic",
                 "elements": [{
-                    "title": "Menu chức năng của Chatbot Fanpage Khoa CNTT CTUET",
+                    "title": "Menu chức năng của Cô Mèo nè ><!!",
                     "subtitle": "Tap để chọn chức năng",
-                    "image_url": "https://old.ctuet.edu.vn/CSS/MainPage/Image/banner.jpg",
+                    "image_url": "https://img.freepik.com/free-vector/cute-cat-teacher-with-chalkboard-cartoon-mascot_357749-761.jpg",
                     "buttons": [
                         {
                             "type": "postback",
-                            "title": "Thông tin tuyển sinh",
-                            "payload": "TUYEN_SINH",
+                            "title": "Hướng Dẫn",
+                            "payload": "HUONG_DAN",
                         },
                         {
                             "type": "postback",
-                            "title": "Thông tin liên hệ",
-                            "payload": "LIEN_HE",
-                        },
-                        {
-                            "type":"web_url",
-                            "url": `${URL_WEBVIEW_DK}`,
-                            "title": "Đăng ký tư vấn",
-                            "webview_height_ratio": "tall",
-                            "messenger_extensions": "true"
+                            "title": "Tra Cứu",
+                            "payload": "TRA_CUU",
                         }
+                        // ,
+                        // {
+                        //     "type":"web_url",
+                        //     "url": `${URL_WEBVIEW_DK}`,
+                        //     "title": "Đăng ký tư vấn",
+                        //     "webview_height_ratio": "tall",
+                        //     "messenger_extensions": "true"
+                        // }
                     ],
                 }]
             }
