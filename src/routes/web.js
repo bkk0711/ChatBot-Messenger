@@ -1,6 +1,7 @@
 import { render } from "ejs";
 import express from "express";
 import homeController from "../controllers/HomeController";
+import mysqlConfig from "../configs/mysqlConfig";
 
 let router = express.Router();
 

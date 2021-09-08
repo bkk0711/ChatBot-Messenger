@@ -21,5 +21,16 @@ var conn = mysql.createConnection({
  
 conn.connect(function(err) {
   if (err) throw err;
+
   console.log("Connected!");
 });
+
+conn.connect(function(err) {
+ 
+  conn.query("SELECT * FROM tbl_chat", function (err, result, fields) {
+    if (err) throw err;
+    console.log(fields)
+    console.log(result);
+  });
+});
+

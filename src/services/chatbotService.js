@@ -109,8 +109,8 @@ let getStarted_menu = () =>{
                         },
                         {
                             "type": "postback",
-                            "title": "Tra Cứu",
-                            "payload": "TRA_CUU",
+                            "title": "DS Chức Năng",
+                            "payload": "CHUC_NANG",
                         }
                         // ,
                         // {
