@@ -88,6 +88,7 @@ async function handleMessage(sender_psid, received_message) {
     let response;
     let q_payload = received_message.quick_reply.payload;
 
+    
     // Set the response based on the postback payload
     switch(q_payload){
         case 'PT1':
@@ -196,7 +197,7 @@ async function handlePostback(sender_psid, received_postback) {
         case 'GET_STARTED':
              await chatbotService.handleGetStarted(sender_psid);
           break;
-        case 'TUYEN_SINH':
+        case 'HUONG_DAN':
           // code block
           response = {
             "attachment":{
