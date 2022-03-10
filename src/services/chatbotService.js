@@ -1,6 +1,7 @@
 import { response } from "express";
 import request from "request"
 require('dotenv').config();
+import mysqlConfig from "../configs/mysqlConfig";
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const URL_WEBVIEW_DK = process.env.URL_WEBVIEW_DK;
@@ -20,10 +21,29 @@ let getInfoProfile = (sender_psid, typeif) =>{
             //     "timezone": -7,
             //     "gender": "male",
             //   }
-            console.log(body);
+            // console.log(body);
+
+            
             
             if (!err) {
             body = JSON.parse(body);
+            mysqlConfig.query(`SELECT * FROM tbl_user WHERE idfb = '${sender_psid}' `, function (err, result, fields) {
+                try {
+                    if(result[0].idfb != null){
+                        mysqlConfig.query(`UPDATE tbl_user SET first_name='${body.first_name}',last_name='${body.last_name}',profile_pic='${body.profile_pic}',gender='${body.gender}' WHERE idfb='${sender_psid}'`);
+                        console.log("update user")
+                    }else{
+                        mysqlConfig.query(`INSERT INTO tbl_user(idfb, first_name, last_name, profile_pic, gender, act, time) VALUES ('${sender_psid}', '${body.first_name}', '${body.last_name}', '${body.profile_pic}', '${body.gender}', '0', '${Math.floor(Date.now() / 1000)}')`);
+                        console.log("insert user 0")
+                    }
+                } catch (error) {
+                    mysqlConfig.query(`INSERT INTO tbl_user(idfb, first_name, last_name, profile_pic, gender, act, time) VALUES ('${sender_psid}', '${body.first_name}', '${body.last_name}', '${body.profile_pic}', '${body.gender}', '0', '${Math.floor(Date.now() / 1000)}')`);
+                    console.log("insert user 1")
+                    
+                }
+                
+            });
+            //console.log(`INSERT INTO tbl_user(idfb, first_name, last_name, profile_pic, gender, act, time) VALUES ('${sender_psid}', '${body.first_name}', '${body.last_name}', '${body.profile_pic}', '${body.gender}', '0', '${Date.now()}')`);
             if(typeif == 'full_name'){
                 info = `${body.last_name} ${body.first_name}`;
             }else if(typeif == 'first_name'){
@@ -74,13 +94,30 @@ let handleGetStarted = (sender_psid) =>{
         try{
             
             let fullname = await getInfoProfile(sender_psid, 'full_name');
-            let response = { "text": `Cô Mèo chào ${fullname} ! `}
+            
+            
+            
+            mysqlConfig.query("SELECT * FROM tbl_chat order by id asc limit 2", function (err, result, fields) {
+
+                for (let index = 0; index < result.length; index++) {
+                   
+                var content = result[index].content
+                content = content.replace('@name', fullname)
+                let response = { "text": `${content}! `}
+                //
+                callSendAPI(sender_psid, response);
+                 sleep(2000);
+                }
+                
+            });
+            
+           
         
-            await callSendAPI(sender_psid, response);
+            
           
-            let response0 = { "text":  `Cô Mèo sẽ giải đáp các thắc mắc của các bạn về thông tin của trường và các biểu mẫu tài liệu ! `}
+            // let response0 = { "text":  `Cô Mèo sẽ giải đáp các thắc mắc của các bạn về thông tin của trường và các biểu mẫu tài liệu ! `}
         
-            await callSendAPI(sender_psid, response0);
+            // await callSendAPI(sender_psid, response0);
             
             let response2 = getStarted_menu();
             await callSendAPI(sender_psid, response2);
@@ -91,6 +128,11 @@ let handleGetStarted = (sender_psid) =>{
     })
 
 }
+function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }  
 let getStarted_menu = () =>{
     let response = {
         "attachment": {

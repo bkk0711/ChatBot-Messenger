@@ -1,0 +1,124 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Góp ý nội dung</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Load custom Javascript and CSS-->
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+        (function(d, s, id){
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/messenger.Extensions.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'Messenger'));
+
+window.extAsyncInit = function () {
+    // the Messenger Extensions JS SDK is done loading 
+
+    MessengerExtensions.getContext('2970543203228333',
+        function success(thread_context) {
+            // success
+            //set psid to input
+            $("#psid").val(thread_context.psid);
+            handleClickButtonReserveTable();
+        },
+        function error(err) {
+            // error
+            console.log('Lỗi', err);
+        }
+    );
+};
+
+//validate inputs
+function validateInputFields() {
+    return true;
+}
+
+
+function handleClickButtonReserveTable() {
+    $("#btnReserveTable").on("click", function (e) {
+        let check = validateInputFields(); //return true or false
+
+        let data = {
+            psid: $("#psid").val(),
+            title: $("#title").val(),
+            noidung: $("#noidung").val(),
+            url: $("#url").val()
+        };
+
+        if (!check) {
+            //close webview
+            MessengerExtensions.requestCloseBrowser(function success() {
+                // webview closed
+            }, function error(err) {
+                // an error occurred
+                console.log(err);
+            });
+
+            //send data to node.js server 
+            $.ajax({
+                url: `${window.location.origin}/P_gopy`,
+                method: "POST",
+                data: data,
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            })
+        }
+    });
+}
+    </script>
+
+</head>
+
+<body>
+    <div class="container fix-height">
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center mt-3">
+                    <span class="title">Góp ý/ Báo cáo</span>
+                </div>
+                <input type="text" id="psid" hidden>
+                <div class="form-group">
+                    <label for="customerName"> Tiêu đề (<span style="color: red">*</span>):</label>
+                    <input type="text" id="title" class="form-control " placeholder="Nhập tiêu đề">
+                </div>
+                <div class="form-group">
+                    <label for="email">Nội dung (<span style="color: red">*</span>):</label>
+                    <textarea rows="4" class="form-control" placeholder="Nội dung" name="noidung" id="noidung"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="url">File đính kèm (nếu có):</label>
+                    <input type="url" id="url" class="form-control" placeholder="URL File đính kèm...">
+                    <div class="invalid-feedback">URL không hợp lệ.</div>
+             
+                </div>
+                <button class="btn btn-primary" id="btnReserveTable"> Góp ý</button>
+            </div>
+
+        </div>
+
+    </div>
+   
+</body>
+
+</html>

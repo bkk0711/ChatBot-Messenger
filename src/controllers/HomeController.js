@@ -1,20 +1,22 @@
 require('dotenv').config();
+var decode = require('decode-html');
 import request from "request";
 import chatbotService from "../services/chatbotService";
 const moment = require("moment");
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-
+import mysqlConfig from "../configs/mysqlConfig";
+//wit.ai
+const {Wit, log} = require('node-wit');
+const clientAI = new Wit({accessToken: process.env.witAIToken});
+//end wit.ai
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const URL_WEBVIEW_DK = process.env.URL_WEBVIEW_DK;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
 const CLIENT_EMAIL = process.env.CLIENT_EMAIL;
 const SHEET_ID = process.env.SHEET_ID;
-const URL_WEBVIEW_KHMT = process.env.URL_WEBVIEW_KHMT;
-const URL_WEBVIEW_CNTT = process.env.URL_WEBVIEW_CNTT;
-const URL_WEBVIEW_KTPM = process.env.URL_WEBVIEW_KTPM;
-const URL_WEBVIEW_HTTT = process.env.URL_WEBVIEW_HTTT;
-const URL_WEBVIEW_KHDL = process.env.URL_WEBVIEW_KHDL;
+
+
 //process.env.NAME_VARIABLES
 let getHomePage = (req, res) => {
     return res.render('homepage.ejs');
@@ -86,65 +88,184 @@ let getWebhook = (req, res) => {
 async function handleMessage(sender_psid, received_message) {
 
     let response;
-    let q_payload = received_message.quick_reply.payload;
-
-    
-    // Set the response based on the postback payload
-    switch(q_payload){
-        case 'PT1':
-            await sender_action(sender_psid);
-            let c1 = {"text": "*Sử dụng kết quả học bạ THPT* \n Cách 1 : Điểm xét tuyển bằng tổng điểm trung bình lớp 10 11 và học kì 1 lớp 12 của 3 môn trong tổ hợp môn xét tuyển đạt từ 18 điểm trở lên ( làm tròn đến số thập phân thứ 2 )"}
-            await callSendAPI(sender_psid, c1);
-            await sender_action(sender_psid);
-            let c2 = {"text": "*Sử dụng kết quả học bạ THPT* \n Cách 2 : Điểm xét tuyển bằng tổng điểm trung bình cả năm lớp 12 của 3 môn trong tổ hợp môn xét tuyển từ 18 điểm trở lên ( làm tròn đến số thập phân thứ 2 )",
-            "quick_replies":[
-                {
-                  "content_type":"text",
-                  "title":"Tính điểm cách 1",
-                  "payload":"TDC1"
-                },{
-                    "content_type":"text",
-                    "title":"Tính điểm cách 2",
-                    "payload":"TDC2"
-                  },
-                  {
-                    "content_type":"text",
-                    "title":"Hướng dẫn xét tuyển",
-                    "payload":"HD_PT1"
-                  }
-              ]}
-            await callSendQickReplies(sender_psid, c2);
-            break;
-        case 'PT2':
-            await sender_action(sender_psid);
-            response = { "text": "*Xét tuyển kết quả kỳ thi tốt nghiệp THPT 2021* \n Điểm xét tuyển bằng tổng điểm ba môn thi tốt nghiệp THPT trong tổ hợp xét tuyển công điểm ưu tiên khu vực, đối tượng " }
-            break;
-        case 'PT3':
-            await sender_action(sender_psid);
-            response = { "text": "*Xét tuyển Sử dụng kết quả thi đánh giá năng lực 2021 do ĐH Quốc gia Hồ Chí Minh tổ chức * \n Điểm xét tuyển là điểm bài thi đánh giá năng lực từ 600 điểm trở lên" }
-          
-            break;
-        case 'PT4':
-            await sender_action(sender_psid);
-            response = { "text": "*Tuyển thẳng theo quy định Bộ Giáo dục và Đào tạo* \n Tuyển thẳng thí sinh đạt giải kỳ thi cấp quốc gia, quốc tế, học sinh có học lực lớp 10, 11, 12 đạt loại khá và hạnh kiểm xếp loại tốt trở lên" }
-          
-            break;  
-        case 'HD_PT1':
-            response = {
-                "attachment":{
-                    "type":"image", 
-                    "payload":{
-                      "url":"https://tuyensinh.ctuet.edu.vn/media/o1XF_nz7qYOroCmv_Rmo41XrYyCKNTarek3c1xnmGY0SHrW6nUZ0FMIzPcUFC8J-Tq6WELjIy2CUGzSz2fB_u9KSRna4NoXpImzi2y7fFsw.jpg"
-                    }
-                  }
-            }
-            break;
-            default:
-               
-    }
-
+    let fullname = await chatbotService.getInfoProfile(sender_psid, 'full_name');
     // Checks if the message contains text
     if (received_message.text) {
+        
+        mysqlConfig.query(`SELECT * FROM tbl_user WHERE idfb='${sender_psid}'`, function (err0, result0, fields0) {
+           
+        
+        
+        if(result0[0].act == 0){
+
+        
+            let kq_nd = null;
+            clientAI.message(received_message.text, {})
+            .then(({entities, intents, traits}) => {
+            // console.log(entities)
+            try {
+
+                console.log(JSON.stringify(entities['tu_khoa:tu_khoa'][0]['body']))
+                let cauhoi = entities['tu_khoa:tu_khoa'][0]['body']; //ORDER BY rand() 
+                mysqlConfig.query(`SELECT * FROM tbl_chat WHERE MATCH (keyword) AGAINST ('${cauhoi}' IN NATURAL LANGUAGE MODE) LIMIT 1`, function (err, result, fields) {
+                    // kq = result;
+
+            
+                    try {
+                        
+                        console.log("fulname :" + fullname)
+                        var content = result[0].content
+                        content = content.replace('@name', fullname)
+                        newline(sender_psid, content)
+                
+                        if(result[0].file != 0){
+                        
+                            let url;
+                            let fname;
+                            mysqlConfig.query(`SELECT * FROM tbl_file WHERE id = '${result[0].file}' LIMIT 1`, function (err, results, fields){
+                                url = results[0].url;
+                                fname = results[0].name;
+                                console.log(fname + " === " +url);
+                                let response12 = {
+                                "attachment":{
+                                    "type":"template",
+                                    "payload":{
+                                    "template_type":"button",
+                                    "text": results[0].name,
+                                    "buttons":[
+                                        {
+                                        "type":"web_url",
+                                        "url":results[0].url,
+                                        "title":"Xem Tại đây"
+                                        }
+                                    ]
+                                    }
+                                }
+                            }
+                            callSendAPI(sender_psid, response12);
+                            });
+                            
+                            
+                        }
+                        // else if(result[0].content){
+                        //     newline(sender_psid, content)
+                        //     // let response1 = {
+                        //     //     "text": content
+                        //     // }
+                        //     // callSendAPI(sender_psid, response1);
+                        // }
+
+                    } catch (error) {
+                        // console.log(error)
+                    
+                        let response2 = {
+                            "text": `Câu trả lời chưa được cập nhật trên hệ thống. Cô sẽ lưu câu hỏi lại và cập nhật trên hệ thống vài mỗi cuối tuần nhé.`
+
+                        }
+                        callSendAPI(sender_psid, response2);
+                    }
+                
+                
+                
+                });
+            } catch (error) { //ORDER BY rand()
+                mysqlConfig.query(`SELECT * FROM tbl_chat WHERE MATCH (keyword) AGAINST ('${received_message.text}' IN NATURAL LANGUAGE MODE) LIMIT 1`, function (err, result, fields) {
+                    // kq = result;
+            
+                    try {
+                        
+                        var content = result[0].content
+                        content = content.replace('@name', fullname)
+                        newline(sender_psid, content)
+                    
+                        if(result[0].file != 0){
+                            
+                            let url;
+                            let fname;
+                            mysqlConfig.query(`SELECT * FROM tbl_file WHERE id = '${result[0].file}' LIMIT 1`, function (err, results, fields){
+                                url = results[0].url;
+                                fname = results[0].name;
+                                // console.log(fname + " === " +url);
+                                let response12 = {
+                                "attachment":{
+                                    "type":"template",
+                                    "payload":{
+                                    "template_type":"button",
+                                    "text": results[0].name,
+                                    "buttons":[
+                                        {
+                                        "type":"web_url",
+                                        "url":results[0].url,
+                                        "title":"Xem Tại đây"
+                                        }
+                                    ]
+                                    }
+                                }
+                            }
+                            callSendAPI(sender_psid, response12);
+                            });
+                            
+                            
+                        }
+                        // else if(result[0].content){
+                        //     newline(sender_psid, content)
+                        //     // let response1 = {
+                        //     //     "text": content
+                        //     // }
+                        //     // callSendAPI(sender_psid, response1);
+                        // }
+
+                    } catch (error) {
+                        // console.log(error)
+                    
+                        let response2 = {
+                            "text": `Câu trả lời chưa được cập nhật trên hệ thống. Cô sẽ lưu câu hỏi lại và cập nhật trên hệ thống vài mỗi cuối tuần nhé.`
+
+                        }
+                        callSendAPI(sender_psid, response2);
+                    }
+                
+                
+                
+                });
+            }
+            
+            // console.log('Yay, got Wit.ai response: ' + JSON.stringify(data));
+
+                
+            })
+            .catch(console.error);
+        }
+    });
+       
+       
+            // console.log(kq_nd+ " 54545");
+            // if(kq_nd != null){
+            //     response = {
+            //         "text": kq_nd
+            //     }
+            // }else{
+            //     response = {
+            //         "text": `Câu trả lời chưa được cập nhật trên hệ thống. Cô sẽ lưu câu hỏi lại và cập nhật trên hệ thống vài mỗi cuối tuần nhé.`
+            //     }
+            // }
+           
+            // callSendAPI(sender_psid, responsea);
+        //     if(result != null){
+        //        console.log(result[0].content);
+        //         response = {
+        //             "text": result[0].content
+        //         }
+
+        //    }else{
+               
+        //     response = {
+        //         "text": `Câu trả lời chưa đƯợc cập nhật trên hệ thống. Cô sẽ lưu câu hỏi lại và cập nhật trên hệ thống vài mỗi cuối tuần nhé.`
+        //     }
+        //    }
+
+        // });
+
         // Create the payload for a basic text message, which
         // will be added to the body of our request to the Send API
         // response = {
@@ -181,9 +302,32 @@ async function handleMessage(sender_psid, received_message) {
     }
 
     // Send the response message
-    callSendAPI(sender_psid, response);
+    // callSendAPI(sender_psid, response);
 }
 
+
+  
+async function newline(sender_psid, message){
+    const newmes = message.split("@next")
+
+    if(newmes.length > 1){
+        for (const val of newmes) { 
+            await sender_action(sender_psid);
+            await sleep(2000);
+            let response1 = {
+                "text": decode(val)
+            }
+            await callSendAPI(sender_psid, response1);
+            
+        }
+    }else{
+        let response1 = {
+            "text": decode(message)
+        }
+        await callSendAPI(sender_psid, response1);
+    }
+    
+}
 // Handles messaging_postbacks events
 async function handlePostback(sender_psid, received_postback) {
     let response;
@@ -198,431 +342,89 @@ async function handlePostback(sender_psid, received_postback) {
              await chatbotService.handleGetStarted(sender_psid);
           break;
         case 'HUONG_DAN':
-          // code block
-          response = {
-            "attachment":{
-                "type":"template",
-                "payload":{
-                  "template_type":"button",
-                  "text":"Thông tin tuyển sinh Khoa Công Nghệ Thông Tin CTUET",
-                  "buttons": [
-                    {
-                        "type": "postback",
-                        "title": "Các ngành tuyển sinh",
-                        "payload": "CAC_NGANH",
-                    },
-                    {
-                        "type": "postback",
-                        "title": "Hình thức xét tuyển",
-                        "payload": "HINH_THUC",
-                    },
-
-                ],
-                }
-              }
+          
+            await sender_action(sender_psid);
+            let hdsd = {
+                "text": "Bạn chỉ cần chat những nội dung hoặc từ khoá mà bạn cần tìm... Cô Mèo sẽ tìm giúp bạn nha!!!"
             }
+
+            await callSendAPI(sender_psid, hdsd);
            
         
           break;
-        case 'CAC_NGANH':
-            let response1 = { "text": "Hiện tại *Khoa Công Nghệ Thông Tin* đang tuyển sinh các ngành sau đây  " }
-            callSendAPI(sender_psid, response1);
-            response = {
+          //.
+          case 'GIOI_THIEU':
+            await sender_action(sender_psid);
+            let gt = {
+                "text": "Cô Mèo là một nhân vật hư cấu, một chatbot có khả năng trả lời tự động giúp sinh viên CTUT trong vấn đề học tập"
+            }
+
+            await callSendAPI(sender_psid, gt);
+          break;
+        case 'CHUC_NANG':
+            await sender_action(sender_psid);
+            let cn = {
+                "text": "Đây là danh sách chức năng của Cô ở hiện tại, sẽ còn update trong thời gian sau nha!!!"
+            }
+            await callSendAPI(sender_psid, cn);
+            await sleep(2000);
+            await sender_action(sender_psid);
+            let responsess = {
                 "attachment": {
                     "type": "template",
                     "payload": {
                         "template_type": "generic",
                         "elements": [{
-                            "title": "Công Nghệ Thông Tin",
+                            "title": "Danh sách chức năng",
                             "subtitle": "Tap để chọn ",
-                            "image_url": "https://i.imgur.com/cskXCn2.png",
+                            "image_url": "",
                             "buttons": [
                                 {
                                     "type": "postback",
-                                    "title": "Thông tin",
-                                    "payload": "CNTT",
-                                }
-                            ]
-                        },
-                        {
-                            "title": "Khoa Học Máy Tính",
-                            "subtitle": "Tap để chọn ",
-                            "image_url": "https://i.imgur.com/GAn372n.png",
-                            "buttons": [
+                                    "title": "Chat Với CVHT",
+                                    "payload": "CHAT_CVHT",
+                                },
                                 {
                                     "type": "postback",
-                                    "title": "Thông tin",
-                                    "payload": "KHMT",
+                                    "title": "Chat với BOT",
+                                    "payload": "CHAT_BOT",
                                 }
-                            ]
-                        },
-                        {
-                            "title": "Kỹ Thuật Phần Mềm",
-                            "subtitle": "Tap để chọn ",
-                            "image_url": "https://i.imgur.com/TB6Ha25.png",
-                            "buttons": [
-                                {
-                                    "type": "postback",
-                                    "title": "Thông tin",
-                                    "payload": "KTPM",
-                                }
-                            ]
-                        },
-                        {
-                            "title": "Hệ Thống Thông Tin",
-                            "subtitle": "Tap để chọn ",
-                            "image_url": "https://i.imgur.com/CL0rji9.png",
-                            "buttons": [
-                                {
-                                    "type": "postback",
-                                    "title": "Thông tin",
-                                    "payload": "HTTT",
-                                }
-                            ]
-                        },
-                        {
-                            "title": "Khoa Học Dữ Liệu",
-                            "subtitle": "Tap để chọn ",
-                            "image_url": "https://i.imgur.com/qwf89Z5.png",
-                            "buttons": [
-                                {
-                                    "type": "postback",
-                                    "title": "Thông tin",
-                                    "payload": "KHDL",
-                                }
-                            ]
+                            ],
                         }]
                     }
                 }
-                }
-                
-                
-          break;
-        case 'HINH_THUC':
-            await sender_action(sender_psid);
-
-            await sender_action(sender_psid);
-           let q_repht = { "text": "Hiện tại trường đang có 4 phương thức xét tuyển : \n 1. Sử dụng kết quả học bạ THPT \n 2. Sử dụng kết quả kì thi tốt nghiệp THPT 2021 \n 3.Sử dụng kết quả thi đánh giá năng lực 2021 do ĐH Quốc gia Hồ Chí Minh tổ chức  \n 4. Tuyển thẳng ",
-               "quick_replies":[
-                    {
-                      "content_type":"text",
-                      "title":"Phương thức 1",
-                      "payload":"PT1"
-                    },{
-                        "content_type":"text",
-                        "title":"Phương thức 2",
-                        "payload":"PT2"
-                      },
-                      {
-                        "content_type":"text",
-                        "title":"Phương thức 3",
-                        "payload":"PT3"
-                      },
-                      {
-                        "content_type":"text",
-                        "title":"Phương thức 4",
-                        "payload":"PT4"
-                      }
-                  ]}
-                  callSendQickReplies(sender_psid, q_repht)
-           // await setTimeout(() => {callSendQickReplies(sender_psid, q_repht)}, 2000);
-            break;
+            }
           
-        case 'LIEN_HE':
+            await callSendAPI(sender_psid, responsess);
+        
+          break;
+        
+        case 'MAIN_MENU':
             await sender_action(sender_psid);
-            let lienhe = {"text": "Phòng Đào Tạo : Số 256, đường Nguyễn Văn Cừ, phường AN Hòa, quận Ninh Kiều, TP Cần Thơ \n Số điện thoại : 0292.3898167 "}
-            await callSendAPI(sender_psid, lienhe);
+            await chatbotService.handleGetStarted(sender_psid);
 
             break;
-        case 'CNTT':
+        case 'CHAT_CVHT':
             await sender_action(sender_psid);
-            let cntt = {"text": "Thông tin : Ngành Công Nghệ Thông Tin"}
-            await callSendAPI(sender_psid, cntt);
+            let chat_cvht = {
+                "text": "Bạn đã chọn chức năng chat với CVHT. Bạn hãy nhập nội đung tin nhắn và chờ CVHT trả lời nhé!!"
+            }
 
-            await sender_action(sender_psid);
+            await callSendAPI(sender_psid, chat_cvht);
+            await mysqlConfig.query(`UPDATE tbl_user SET act='1' WHERE idfb='${sender_psid}'`);
 
-            let cntt1 = { "text": "Mã trường : KCC"}
-            await callSendAPI(sender_psid, cntt1);
 
-            await sender_action(sender_psid);
-            
-            let cntt2 = { "text": "Mã ngành : 7480201 "}
-            await callSendAPI(sender_psid, cntt2);
-
-            await sender_action(sender_psid);
-            
-            // let cntt3 = {  "text": " " }
-            // callSendAPI(sender_psid, cntt3);
-            let cntt4 = {
-                "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
-                }
-            await callSendAPI(sender_psid, cntt4);
-            await sender_action(sender_psid);
-            await sleep(2000);
-            let cntt_btn = {
-                "attachment":{
-                    "type":"template",
-                    "payload":{
-                      "template_type":"button",
-                      "text":"Xem thêm các thông tin khác ",
-                      "buttons":[
-                        {
-                          "type":"postback",
-                          "title": "Các ngành tuyển sinh",
-                          "payload": "CAC_NGANH",
-                        },
-                        {
-                            "type":"web_url",
-                            "url": `${URL_WEBVIEW_CNTT}`,
-                            "title": "Xem Chi tiết",
-                            "webview_height_ratio": "tall",
-                            "messenger_extensions": "true"
-                        },
-                        {
-                            "type":"postback",
-                            "title":"Quay về",
-                            "payload":"TUYEN_SINH"
-                          }
-                      ]
-                    }
-                  }
-                }
-                await callSendAPI(sender_psid, cntt_btn);
-            
-                // "quick_replies":[
-                //     {
-                //       "content_type":"text",
-                //       "title":"Đăng Ký Tư Vấn Ngay",
-                //       "payload":"DANG_KY",
-                //     },{
-                //       "content_type":"text",
-                //       "title":"Tạo Ảnh Thông Tin",
-                //       "payload":"IMG_CNTT",
-                //     }
-                //   ]
-            //   await setTimeout(() => {callSendQickReplies(sender_psid, cntt4)}, 2000);
-            // await callSendQickReplies(sender_psid, cntt4);
             break;
-        case 'KHMT':
+         
+        case 'CHAT_BOT':
             await sender_action(sender_psid);
-            let khmt = {"text": "Thông tin : Ngành Khoa Học Máy Tính"}
-            await callSendAPI(sender_psid, khmt);
-
-            await sender_action(sender_psid);
-
-            let khmt1 = { "text": "Mã trường : KCC"}
-            await callSendAPI(sender_psid, khmt1);
-
-            await sender_action(sender_psid);
-            
-            let khmt2 = { "text": "Mã ngành : 7480101 "}
-            await callSendAPI(sender_psid, khmt2);
-
-            await sender_action(sender_psid);
-            
-            // let cntt3 = {  "text": " " }
-            // callSendAPI(sender_psid, cntt3);
-            let khmt3 = {
-                "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
-                }
-            await callSendAPI(sender_psid, khmt3);
-            await sender_action(sender_psid);
-            await sleep(2000);
-            let khmt_btn = {
-                "attachment":{
-                    "type":"template",
-                    "payload":{
-                      "template_type":"button",
-                      "text":"Xem thêm các thông tin khác ",
-                      "buttons":[
-                        {
-                          "type":"postback",
-                          "title": "Các ngành tuyển sinh",
-                          "payload": "CAC_NGANH",
-                        },
-                        {
-                            "type":"web_url",
-                            "url": `${URL_WEBVIEW_KHMT}`,
-                            "title": "Xem Chi tiết",
-                            "webview_height_ratio": "tall",
-                            "messenger_extensions": "true"
-                        },
-                        {
-                            "type":"postback",
-                            "title":"Quay về",
-                            "payload":"TUYEN_SINH"
-                          }
-                      ]
-                    }
-                  }
-                }
-                await callSendAPI(sender_psid, khmt_btn);
+            let chat_bot = {
+                "text": "Bạn đã chọn chức năng chat với BOT. Bạn hãy nhập nội đung tin nhắn hoặc từ khoá nội dung, Chatbot sẽ hỗ trợ bạn nhé!!"
+            } 
+            await callSendAPI(sender_psid, chat_bot);
+            await mysqlConfig.query(`UPDATE tbl_user SET act='0' WHERE idfb='${sender_psid}'`);
             break;
-        case 'KTPM':
-            await sender_action(sender_psid);
-            let ktpm = {"text": "Thông tin : Ngành Kỹ Thuật Phần Mềm"}
-            await callSendAPI(sender_psid, ktpm);
-
-            await sender_action(sender_psid);
-
-            let ktpm1 = { "text": "Mã trường : KCC"}
-            await callSendAPI(sender_psid, ktpm1);
-
-            await sender_action(sender_psid);
-            
-            let ktpm2 = { "text": "Mã ngành : 7480103 "}
-            await callSendAPI(sender_psid, ktpm2);
-
-            await sender_action(sender_psid);
-            
-            // let ktpm3 = {  "text": " " }
-            // callSendAPI(sender_psid, ktpm3);
-            let ktpm4 = {
-                "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
-                }
-            await callSendAPI(sender_psid, ktpm4);
-            await sender_action(sender_psid);
-            await sleep(2000);
-            let ktpm_btn = {
-                "attachment":{
-                    "type":"template",
-                    "payload":{
-                      "template_type":"button",
-                      "text":"Xem thêm các thông tin khác ",
-                      "buttons":[
-                        {
-                          "type":"postback",
-                          "title": "Các ngành tuyển sinh",
-                          "payload": "CAC_NGANH",
-                        },
-                        {
-                            "type":"web_url",
-                            "url": `${URL_WEBVIEW_KTPM}`,
-                            "title": "Xem Chi tiết",
-                            "webview_height_ratio": "tall",
-                            "messenger_extensions": "true"
-                        },
-                        {
-                            "type":"postback",
-                            "title":"Quay về",
-                            "payload":"TUYEN_SINH"
-                          }
-                      ]
-                    }
-                  }
-                }
-                await callSendAPI(sender_psid, ktpm_btn);
-            break;
-        case 'HTTT':
-            await sender_action(sender_psid);
-            let httt = {"text": "Thông tin : Ngành Hệ Thống Thông Tin"}
-            await callSendAPI(sender_psid, httt);
-
-            await sender_action(sender_psid);
-
-            let httt1 = { "text": "Mã trường : KCC"}
-            await callSendAPI(sender_psid, httt1);
-
-            await sender_action(sender_psid);
-            
-            let httt2 = { "text": "Mã ngành : 7480104 "}
-            await callSendAPI(sender_psid, httt2);
-
-            await sender_action(sender_psid);
-            
-            // let httt3 = {  "text": " " }
-            // callSendAPI(sender_psid, httt3);
-            let httt4 = {
-                "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
-                }
-            await callSendAPI(sender_psid, httt4);
-            await sender_action(sender_psid);
-            await sleep(2000);
-            let httt_btn = {
-                "attachment":{
-                    "type":"template",
-                    "payload":{
-                      "template_type":"button",
-                      "text":"Xem thêm các thông tin khác ",
-                      "buttons":[
-                        {
-                          "type":"postback",
-                          "title": "Các ngành tuyển sinh",
-                          "payload": "CAC_NGANH",
-                        },
-                        {
-                            "type":"web_url",
-                            "url": `${URL_WEBVIEW_HTTT}`,
-                            "title": "Xem Chi tiết",
-                            "webview_height_ratio": "tall",
-                            "messenger_extensions": "true"
-                        },
-                        {
-                            "type":"postback",
-                            "title":"Quay về",
-                            "payload":"TUYEN_SINH"
-                          }
-                      ]
-                    }
-                  }
-                }
-                await callSendAPI(sender_psid, httt_btn);
-            break;
-        case 'KHDL':
-            await sender_action(sender_psid);
-            let khdl = {"text": "Thông tin : Ngành Khoa Học Dữ Liệu"}
-            await callSendAPI(sender_psid, khdl);
-
-            await sender_action(sender_psid);
-
-            let khdl1 = { "text": "Mã trường : KCC"}
-            await callSendAPI(sender_psid, khdl1);
-
-            await sender_action(sender_psid);
-            
-            let khdl2 = { "text": "Mã ngành : 7480109"}
-            await callSendAPI(sender_psid, khdl2);
-
-            await sender_action(sender_psid);
-            
-            // let khdl3 = {  "text": " " }
-            // callSendAPI(sender_psid, khdl3);
-            let khdl4 = {
-                "text": " Tổ hợp xét tuyển : A00, A01, C01, D01",
-                }
-            await callSendAPI(sender_psid, khdl4);
-            await sender_action(sender_psid);
-            await sleep(2000);
-            let khdl_btn = {
-                "attachment":{
-                    "type":"template",
-                    "payload":{
-                      "template_type":"button",
-                      "text":"Xem thêm các thông tin khác ",
-                      "buttons":[
-                        {
-                          "type":"postback",
-                          "title": "Các ngành tuyển sinh",
-                          "payload": "CAC_NGANH",
-                        },
-                        {
-                            "type":"web_url",
-                            "url": `${URL_WEBVIEW_KHDL}`,
-                            "title": "Xem Chi tiết",
-                            "webview_height_ratio": "tall",
-                            "messenger_extensions": "true"
-                        },
-                        {
-                            "type":"postback",
-                            "title":"Quay về",
-                            "payload":"TUYEN_SINH"
-                          }
-                      ]
-                    }
-                  }
-                }
-                await callSendAPI(sender_psid, khdl_btn);
-                break; 
+        
         default:
           // code block
       }
@@ -670,14 +472,14 @@ function callSendAPI(sender_psid, response) {
 
     // Send the HTTP request to the Messenger Platform
     request({
-        "uri": "https://graph.facebook.com/v10.0/me/messages",
+        "uri": "https://graph.facebook.com/v11.0/me/messages",
         "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
         "method": "POST",
         "json": request_body
     }, (err, res, body) => {
         
         if (!err) {
-            console.log('message sent!')
+            console.log('message sent! ')
         } else {
             console.error("Unable to send message:" + err);
         }
@@ -700,7 +502,7 @@ function callSendQickReplies(sender_psid, response) {
 
     // Send the HTTP request to the Messenger Platform
     request({
-        "uri": "https://graph.facebook.com/v10.0/me/messages",
+        "uri": "https://graph.facebook.com/v11.0/me/messages",
         "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
         "method": "POST",
         "json": request_body
@@ -722,7 +524,7 @@ let setupProfile = async(req, res) =>{
     let request_body = {
         
         "get_started": {"payload":"GET_STARTED"},
-        "whitelisted_domains": ["https://chatctut.herokuapp.com/"]
+        "whitelisted_domains": ["https://4cf2-2405-4802-d0c9-57a0-f586-d288-53f1-df4e.ngrok.io"]
        
     }
 
@@ -753,25 +555,32 @@ let setupmenu = async(req, res) =>{
                     "call_to_actions": [
                         {
                             "type": "postback",
-                            "title": "Menu Chính",
+                            "title": "Reset BOT",
                             "payload": "MAIN_MENU"
                         },
                         {
                             "type": "postback",
-                            "title": "Thông Tin Về Khoa",
-                            "payload": "TT_KHOA"
-                        },
-                        {
-                            "type": "web_url",
-                            "title": "Thông tin về trường",
-                            "url": "https://www.ctuet.edu.vn",
-                            "webview_height_ratio": "full"
-                        },
+                            "title": "Chat Trực Tiếp",
+                            "payload": ""
+                        }
+                        ,
                         {
                             "type": "postback",
-                            "title": "Khởi động lại BOT",
-                            "payload": "RESET"
-                        },
+                            "title": "Chat Với BOT",
+                            "payload": "CHAT_BOT"
+                        }
+                        // ,
+                        // {
+                        //     "type": "web_url",
+                        //     "title": "Thông tin về trường",
+                        //     "url": "https://www.ctuet.edu.vn",
+                        //     "webview_height_ratio": "full"
+                        // },
+                        // {
+                        //     "type": "postback",
+                        //     "title": "Khởi động lại BOT",
+                        //     "payload": "RESET"
+                        // },
                     ]
                 }
             ]
@@ -796,40 +605,44 @@ let setupmenu = async(req, res) =>{
 }
 
 let handleRegister = (req, res) =>{
-    return res.render('dang_ky.ejs');
+    return res.render('gopy.ejs');
 
 }
 let handlePostRegister = async (req, res)  =>{
     try{
-        let customerName = "";
-        if(req.body.customerName == ""){
-            customerName = await chatbotService.getInfoProfile(req.body.psid, 'full_name');
-        }else customerName = req.body.customerName;
+        let title = "";
+        let url = "";
+        if(req.body.title == ""){
+            title = "Góp ý #" + req.body.psid
+        }else title = req.body.title;
+        if(req.body.url == ""){
+            url = ""
+        }else url = req.body.url;
         let replyreg = {
-            "text": `</----- *Thông tin đăng ký tư vấn* ------/>
-            \nHọ và Tên: ${customerName}
-            \nSố điện thoại: ${req.body.phoneNumber}
-            \nĐịa chỉ Email:  ${req.body.email}`   
+            "text": `</----- *Thông tin Góp ý* ------/>
+            \nTiêu đề: ${title}
+            \nNội dung: ${req.body.noidung}
+            \nurl:  ${req.body.url}`   
         }
         await sender_action(req.body.psid);
         await callSendAPI(req.body.psid, replyreg);
-
+        await mysqlConfig.query(`INSERT INTO tbl_gopy( idfb, tieude, noidung, url, time) VALUES ('${req.body.psid}','${title}','${req.body.noidung}','${url}','${Math.floor(Date.now() / 1000)}')`);
         let replyreg1 = {
-            "text": `Bạn đã đăng ký tư vấn thành công!! 
-Bộ phận tuyển sinh sẽ liên lạc và tư vấn cho bạn trong tương lai`   
+            "text": `Bạn đã góp ý thành công!! 
+Bộ phận quản lý sẽ xem xét và cập nhật sớm nhất bạn nha`   
         }
         await sender_action(req.body.psid);
         await callSendAPI(req.body.psid, replyreg1);
 
         // write to sheet
-        let currentDate = new Date();
+       // let currentDate = new Date();
 
-        const format = "HH:mm DD/MM/YYYY"
+       // const format = "HH:mm DD/MM/YYYY"
 
-        let formatedDate = moment(currentDate).format(format);
+       // let formatedDate = moment(currentDate).format(format);
 
         // Initialize the sheet - doc ID is the long id in the sheets URL
-        const doc = new GoogleSpreadsheet(SHEET_ID);
+        //const doc = new GoogleSpreadsheet(SHEET_ID);
 
         // Initialize Auth - see more available options at https://theoephraim.github.io/node-google-spreadsheet/#/getting-started/authentication
         // for other sẻver
@@ -838,69 +651,29 @@ Bộ phận tuyển sinh sẽ liên lạc và tư vấn cho bạn trong tương 
         //     private_key: PRIVATE_KEY,
         // });
         // for heroku
-        await doc.useServiceAccountAuth({
-            client_email:JSON.parse(`"${CLIENT_EMAIL}"`) ,
-            private_key: JSON.parse(`"${PRIVATE_KEY}"`) ,
-        });
+        // await doc.useServiceAccountAuth({
+        //     client_email:JSON.parse(`"${CLIENT_EMAIL}"`) ,
+        //     private_key: JSON.parse(`"${PRIVATE_KEY}"`) ,
+        // });
 
-        await doc.loadInfo(); // loads document properties and worksheets
+        // await doc.loadInfo(); // loads document properties and worksheets
 
-        const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id] or doc.sheetsByTitle[title]
-        let fbName = await chatbotService.getInfoProfile(req.body.psid, 'full_name');
-        await sheet.addRow(
-            {
-                "Tên Facebook": fbName,
-                "Email": `${req.body.email}`,
-                "Số điện thoại": `'${req.body.phoneNumber}`,
-                "Thời gian": formatedDate,
-                "Tên khách hàng": customerName
-            });
+        // const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id] or doc.sheetsByTitle[title]
+        // let fbName = await chatbotService.getInfoProfile(req.body.psid, 'full_name');
+        // await sheet.addRow(
+        //     {
+        //         "Tên Facebook": fbName,
+        //         "Email": `${req.body.email}`,
+        //         "Số điện thoại": `'${req.body.phoneNumber}`,
+        //         "Thời gian": formatedDate,
+        //         "Tên khách hàng": customerName
+        //     });
             
-            console.log('write to sheet done');
+        //     console.log('write to sheet done');
 
 
     }catch(e){
         console.log(e);
-    }
-}
-
-let getGoogleSheet = async (req, res) => {
-    try {
-
-        let currentDate = new Date();
-
-        const format = "HH:mm DD/MM/YYYY"
-
-        let formatedDate = moment(currentDate).format(format);
-
-        // Initialize the sheet - doc ID is the long id in the sheets URL
-        const doc = new GoogleSpreadsheet(SHEET_ID);
-
-        // Initialize Auth - see more available options at https://theoephraim.github.io/node-google-spreadsheet/#/getting-started/authentication
-        await doc.useServiceAccountAuth({
-            client_email: CLIENT_EMAIL,
-            private_key: PRIVATE_KEY,
-        });
-
-        await doc.loadInfo(); // loads document properties and worksheets
-
-        const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id] or doc.sheetsByTitle[title]
-
-        // append rows
-        await sheet.addRow(
-            {
-                "Tên Facebook": 'Hỏi Dân IT',
-                "Email": 'haryphamdev@gmail.com',
-                "Số điện thoại": `'0321456789`,
-                "Thời gian": formatedDate,
-                "Tên khách hàng": "Eric"
-            });
-
-
-        return res.send('Writing data to Google Sheet succeeds!')
-    }
-    catch (e) {
-        return res.send('Oops! Something wrongs, check logs console for detail ... ')
     }
 }
 

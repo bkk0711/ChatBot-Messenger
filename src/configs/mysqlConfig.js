@@ -9,6 +9,7 @@ var conn = mysql.createConnection({
   user: process.env.mysql_user,
   password: process.env.mysql_pass
 });
+
 try{
   conn.connect(function(err) {
       if (err) throw err;

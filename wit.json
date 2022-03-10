@@ -1,0 +1,61 @@
+{
+   "text":"Cô cho em hỏi về cách đóng tiền học phí ạ ?",
+   "intents":[
+      {
+         "id":"388394796023614",
+         "name":"cau_hoi",
+         "confidence":1
+      }
+   ],
+   "entities":{
+      "tu_khoa:tu_khoa":[
+         {
+            "id":"240317791352860",
+            "name":"tu_khoa",
+            "role":"tu_khoa",
+            "start":17,
+            "end":39,
+            "body":"cách đóng tiền học phí",
+            "confidence":0.9817,
+            "entities":[
+               
+            ],
+            "value":"cách đóng tiền học phí",
+            "type":"value"
+         }
+      ],
+      "tu_de_hoi:tu_de_hoi":[
+         {
+            "id":"403702621106200",
+            "name":"tu_de_hoi",
+            "role":"tu_de_hoi",
+            "start":0,
+            "end":16,
+            "body":"Cô cho em hỏi về",
+            "confidence":0.9856,
+            "entities":[
+               
+            ],
+            "value":"Cô cho em hỏi về",
+            "type":"value"
+         },
+         {
+            "id":"403702621106200",
+            "name":"tu_de_hoi",
+            "role":"tu_de_hoi",
+            "start":40,
+            "end":43,
+            "body":"ạ ?",
+            "confidence":0.9593,
+            "entities":[
+               
+            ],
+            "value":"ạ ?",
+            "type":"value"
+         }
+      ]
+   },
+   "traits":{
+      
+   }
+}

@@ -1,7 +1,7 @@
 import { render } from "ejs";
 import express from "express";
 import homeController from "../controllers/HomeController";
-import mysqlConfig from "../configs/mysqlConfig";
+
 
 let router = express.Router();
 
@@ -16,8 +16,11 @@ let initWebRoutes = (app) => {
     router.post('/webhook', homeController.postWebhook);
     router.get('/webhook', homeController.getWebhook);
 
-    router.get('/dang_ky', homeController.handleRegister);
-    router.post("/P_dang_ky", homeController.handlePostRegister);
+    //router.get('/dang_ky', homeController.handleRegister);
+    //router.post("/P_dang_ky", homeController.handlePostRegister);
+
+    router.get('/gopy', homeController.handleRegister);
+    router.post("/P_gopy", homeController.handlePostRegister);
 
 
     router.get('/khmt', (req, res) => {
@@ -35,6 +38,8 @@ let initWebRoutes = (app) => {
     router.get('/httt', (req, res) => {
         res.render('httt.ejs');
     });
+
+   
 
 
     return app.use('/', router);
